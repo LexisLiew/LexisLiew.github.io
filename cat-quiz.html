@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>你是哪种小猫？</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+      background: #faf9f6;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 36px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.07);
+    }
+
+    .progress-track {
+      height: 4px;
+      background: #eee;
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #1a1a1a;
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .q-counter {
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .q-text {
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt {
+      background: #faf9f6;
+      border: 1.5px solid #e8e8e4;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 15px;
+      color: #1a1a1a;
+      cursor: pointer;
+      text-align: left;
+      line-height: 1.5;
+      transition: all 0.15s;
+    }
+
+    .opt:hover {
+      background: #f0ede8;
+      border-color: #ccc;
+    }
+
+    .opt.selected {
+      background: #1a1a1a;
+      color: white;
+      border-color: #1a1a1a;
+    }
+
+    /* 结果页 */
+    .result { text-align: center; }
+
+    .cat-emoji {
+      font-size: 80px;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .cat-name {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .cat-tag {
+      display: inline-block;
+      font-size: 13px;
+      color: #888;
+      background: #f5f5f0;
+      padding: 5px 14px;
+      border-radius: 99px;
+      margin-bottom: 24px;
+    }
+
+    .cat-desc {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.9;
+      text-align: left;
+      background: #faf9f6;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 28px;
+    }
+
+    .retry {
+      background: #1a1a1a;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 32px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .retry:hover { background: #444; }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- 答题区 -->
+  <div id="quiz">
+    <div class="progress-track">
+      <div class="progress-fill" id="bar" style="width: 0%"></div>
+    </div>
+    <div class="q-counter" id="counter">第 1 题，共 6 题</div>
+    <div class="q-text" id="qtext"></div>
+    <div class="options" id="opts"></div>
+  </div>
+
+  <!-- 结果区 -->
+  <div id="result" class="result hidden"></div>
+
+</div>
+
+<script>
+
+  var questions = [
+    {
+      text: "朋友临时邀请你去一个全是陌生人的聚会，你的第一反应是？",
+      options: [
+        { text: "有点期待，也许会认识有意思的人", s: 2, p: 0 },
+        { text: "有点犹豫，但朋友在的话就去吧", s: 1, p: 0 },
+        { text: "想找借口推掉，太消耗能量了", s: -1, p: 0 },
+        { text: "直接拒绝，我有更想做的事", s: -2, p: 0 },
+      ]
+    },
+    {
+      text: "截止日期前一天，任务还没做完，你通常会？",
+      options: [
+        { text: "通宵搞定，我在压力下发挥更好", s: 0, p: 2 },
+        { text: "焦虑但专注，一步一步推进", s: 0, p: 1 },
+        { text: "又焦虑又低效，脑子转不动", s: 0, p: -1 },
+        { text: "直接摆烂，反正了", s: 0, p: -2 },
+      ]
+    },
+    {
+      text: "你和朋友意见不合，你更倾向于？",
+      options: [
+        { text: "直接说出我的看法，讨论清楚", s: 2, p: 1 },
+        { text: "先听对方说完，再表达自己", s: 1, p: 0 },
+        { text: "算了，不想起冲突", s: -1, p: -1 },
+        { text: "表面附和，内心保持自己的想法", s: -2, p: 0 },
+      ]
+    },
+    {
+      text: "周末突然有一整天完全没有计划，你会？",
+      options: [
+        { text: "马上约朋友出去，空着太无聊", s: 2, p: 0 },
+        { text: "看心情，可能出门也可能宅", s: 0, p: 0 },
+        { text: "待在家，自己安排，很爽", s: -1, p: 0 },
+        { text: "什么都不做，这种日子最幸福", s: -2, p: 1 },
+      ]
+    },
+    {
+      text: "遇到很难搞的问题，你会？",
+      options: [
+        { text: "越难越想搞定，有点兴奋", s: 0, p: 2 },
+        { text: "认真查资料，一定能找到解法", s: 0, p: 1 },
+        { text: "先放着，等状态好了再说", s: 0, p: -1 },
+        { text: "找人帮忙或者绕过去", s: 1, p: -2 },
+      ]
+    },
+    {
+      text: "要在一群人面前做演讲，你会？",
+      options: [
+        { text: "挺享受的，我喜欢被关注", s: 2, p: 2 },
+        { text: "会准备充分，然后硬上", s: 0, p: 1 },
+        { text: "很紧张，但勉强能做到", s: 0, p: -1 },
+        { text: "能不上就不上，这是噩梦", s: -2, p: -2 },
+      ]
+    },
+  ];
+
+  var cats = [
+    {
+      emoji: "🟠",
+      name: "橘猫队长",
+      tag: "外向 · 抗压 · 天生领袖",
+      desc: "你精力充沛，社交是你的充电方式而不是消耗。压力来了你反而来劲，能带着大家往前冲。你的缺点可能是有时不够照顾别人的节奏——但大部分时候，大家都愿意跟着你走。",
+      match: function(s, p) { return s >= 3 && p >= 2; }
+    },
+    {
+      emoji: "🐱",
+      name: "奶牛猫学者",
+      tag: "独立 · 专注 · 有自己的世界",
+      desc: "你不需要太多社交，独处对你来说是真正的充电。面对压力你会认真分析，不慌不忙。你有很强的内在秩序感，做事靠谱，只是偶尔别人摸不透你在想什么。",
+      match: function(s, p) { return s <= -2 && p >= 1; }
+    },
+    {
+      emoji: "🤍",
+      name: "布偶猫疗愈师",
+      tag: "温和 · 共情 · 慢热但真诚",
+      desc: "你不是不喜欢社交，但更在意质量而非数量。压力来了你会先照顾自己的情绪，再慢慢恢复。你是那种让人觉得很安全的人，朋友圈不大但都很真。",
+      match: function(s, p) { return s >= 0 && p <= 0; }
+    },
+    {
+      emoji: "🌿",
+      name: "狸花猫侦探",
+      tag: "观察者 · 适应力强 · 一眼看穿",
+      desc: "你介于内向和外向之间，能读懂环境，知道什么时候该出头什么时候该退。压力下你不一定硬扛，但你会找到迂回的解法。你是那种"沉默但一开口就准"的人。",
+      match: function() { return true; }
+    },
+  ];
+
+  var social = 0;
+  var pressure = 0;
+  var current = 0;
+
+  function render() {
+    var q = questions[current];
+    document.getElementById('counter').textContent = '第 ' + (current + 1) + ' 题，共 ' + questions.length + ' 题';
+    document.getElementById('qtext').textContent = q.text;
+    document.getElementById('bar').style.width = (current / questions.length * 100) + '%';
+
+    var opts = document.getElementById('opts');
+    opts.innerHTML = '';
+    q.options.forEach(function(opt, i) {
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.textContent = opt.text;
+      btn.onclick = function() { pick(opt, btn); };
+      opts.appendChild(btn);
+    });
+  }
+
+  function pick(opt, btn) {
+    document.querySelectorAll('.opt').forEach(function(b) { b.classList.remove('selected'); });
+    btn.classList.add('selected');
+    setTimeout(function() {
+      social += opt.s;
+      pressure += opt.p;
+      current++;
+      if (current < questions.length) {
+        render();
+      } else {
+        showResult();
+      }
+    }, 300);
+  }
+
+  function showResult() {
+    document.getElementById('quiz').classList.add('hidden');
+    var cat = cats.find(function(c) { return c.match(social, pressure); }) || cats[3];
+    var r = document.getElementById('result');
+    r.classList.remove('hidden');
+    r.innerHTML =
+      '<span class="cat-emoji">' + cat.emoji + '</span>' +
+      '<div class="cat-name">' + cat.name + '</div>' +
+      '<div class="cat-tag">' + cat.tag + '</div>' +
+      '<div class="cat-desc">' + cat.desc + '</div>' +
+      '<button class="retry" onclick="restart()">再测一次</button>';
+  }
+
+  function restart() {
+    social = 0; pressure = 0; current = 0;
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('quiz').classList.remove('hidden');
+    render();
+  }
+
+  render();
+</script>
+
+</body>
+</html>
