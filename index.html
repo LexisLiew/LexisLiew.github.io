@@ -255,10 +255,7 @@
       text-decoration: none;
       width: 38px;
       height: 38px;
-      border: 1px solid rgba(238,247,241,0.16);
-      border-radius: 8px;
-      background: rgba(238,247,241,0.04);
-      transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s;
+      transition: color 0.2s, transform 0.2s;
       position: relative;
     }
     .social-link svg {
@@ -276,8 +273,6 @@
     }
     .social-link:hover {
       color: #fff;
-      border-color: rgba(255,255,255,0.42);
-      background: rgba(255,255,255,0.12);
       transform: translateY(-2px);
     }
     .social-link.wechat {
@@ -334,6 +329,28 @@
     }
     .about-text .hl { color: var(--text); font-weight: 500; } /* 高亮文字 */
 
+    .interest-word {
+      position: relative;
+      cursor: default;
+      border-bottom: 1px dotted var(--text-dim);
+    }
+    .interest-word::after {
+      content: attr(data-icon);
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      transform: translate(-50%, -6px) scale(0.6);
+      font-size: 20px;
+      line-height: 1;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .interest-word:hover::after {
+      opacity: 1;
+      transform: translate(-50%, -10px) scale(1);
+    }
+
     /* ============================
        💼 经历卡片
        ============================ */
@@ -344,7 +361,7 @@
       padding: 20px 16px;
       margin: 0 -16px;
       border-radius: 8px;
-      cursor: default;
+      cursor: pointer;
       transition: background 0.2s;
       text-decoration: none;
       color: inherit;
@@ -592,13 +609,16 @@
     <section class="section" id="about">
       <!-- 👇 改你的自我介绍,  <span class="hl">...</span> 会高亮显示 -->
       <p class="about-text" data-i18n-html="about1">
-        我在 <span class="hl">LUMOS Robotics</span> 做产品和海外商业化。公司做具身智能的数据采集——帮机器人公司生产训练数据。我入职做海外传播, 三个月后发现产品端有真空, 就自己顶上去了, 现在同时跑产品设计和商业化两条线。
+        现在我为 <span class="hl">Lumos Robotics</span> 工作，负责具身智能数据生产平台软件，以及为海外商业化发展服务。
       </p>
       <p class="about-text" data-i18n-html="about2">
-        在这之前, 我从零帮一个 3D 打印机品牌在 <span class="hl">Kickstarter 上拿了一百万美金</span>。再之前在外贸公司管展会、拿补贴、搭流程。三段经历跨度不小, 但做的事有一条线: 把技术翻译成市场听得懂的东西, 再把市场的反馈带回来改产品。
+        我从总经理助理工作起步，后经历了完整的公司从 0 开始的创业，再到品牌打响，完成 80+ 万美金 <span class="hl">Kickstarter</span> 众筹订单，再到铺开全球分销商渠道，完成了对企业 0-1-10 的发展。
       </p>
       <p class="about-text" data-i18n-html="about3">
-        我对"只做其中一头"不太感兴趣——产品做完不管怎么卖, 或者只管卖不管产品好不好, 这两种我都干不下去。<span class="hl">能把从产品到市场的全链路跑通</span>, 是我觉得自己真正擅长的事。
+        我希望自己能有更综合的能力，不仅限于在企业内部提供真诚、专业服务和管理，对全球市场的拓展和营销，更能深入产品本身，从开发到测试再到走向市场的完整闭环。过去三年半的职业成长中，我完成了这些工作岗位的许多工作，建立了综合能力的闭环。
+      </p>
+      <p class="about-text" data-i18n-html="about4">
+        我在业余时间进行力量训练，并为朋友提供健身指导。良好的精力和身体是职业发展的基础。此外就是 <span class="interest-word" data-icon="☕">咖啡</span> 和 <span class="interest-word" data-icon="📚">阅读</span>。
       </p>
     </section>
 
@@ -608,7 +628,7 @@
       <p class="section-label" data-i18n="sectionExperience">Experience</p>
 
       <!-- 👇 经历 1: LUMOS -->
-      <div class="exp-card">
+      <a class="exp-card" href="https://www.lumosbot.tech" target="_blank" rel="noopener">
         <p class="exp-date mono" data-i18n="date1">2025 — Now</p>
         <div>
           <p class="exp-title" data-i18n="exp1Title">Product & Overseas GTM · LUMOS Robotics</p>
@@ -622,10 +642,10 @@
             <span class="tag">Embodied AI</span>
           </div>
         </div>
-      </div>
+      </a>
 
       <!-- 👇 经历 2: WonderMaker -->
-      <div class="exp-card">
+      <a class="exp-card" href="https://www.wondermaker3d.com" target="_blank" rel="noopener">
         <p class="exp-date mono" data-i18n="date2">2024 — 2025</p>
         <div>
           <p class="exp-title" data-i18n="exp2Title">Marketing Lead · WonderMaker 3D</p>
@@ -640,10 +660,10 @@
             <span class="tag">Distributors</span>
           </div>
         </div>
-      </div>
+      </a>
 
       <!-- 👇 经历 3: H&K -->
-      <div class="exp-card">
+      <a class="exp-card" href="https://www.hnk-intl.com" target="_blank" rel="noopener">
         <p class="exp-date mono" data-i18n="date3">2022 — 2024</p>
         <div>
           <p class="exp-title" data-i18n="exp3Title">GM Assistant · H&K International Trade</p>
@@ -657,7 +677,7 @@
             <span class="tag">Gov Relations</span>
           </div>
         </div>
-      </div>
+      </a>
 
       <!-- 👇 学历 -->
       <div class="exp-card">
@@ -710,13 +730,14 @@
     zh: {
       heroTitle: '你好！我是刘含轩👋',
       heroSubtitle: 'Product & Go-to-Market',
-      heroIntro: '做产品, 也做商业化。在一家机器人公司把这两件事串成了一个闭环。',
+      heroIntro: '做产品, 也做商业化：不想做BD的GTM不是好的产品经理',
       navAbout: 'About',
       navExperience: 'Experience',
       navAsk: 'Ask me',
-      about1: '我在 <span class="hl">LUMOS Robotics</span> 做产品和海外商业化。公司做具身智能的数据采集——帮机器人公司生产训练数据。我入职做海外传播, 三个月后发现产品端有真空, 就自己顶上去了, 现在同时跑产品设计和商业化两条线。',
-      about2: '在这之前, 我从零帮一个 3D 打印机品牌在 <span class="hl">Kickstarter 上拿了一百万美金</span>。再之前在外贸公司管展会、拿补贴、搭流程。三段经历跨度不小, 但做的事有一条线: 把技术翻译成市场听得懂的东西, 再把市场的反馈带回来改产品。',
-      about3: '我对"只做其中一头"不太感兴趣——产品做完不管怎么卖, 或者只管卖不管产品好不好, 这两种我都干不下去。<span class="hl">能把从产品到市场的全链路跑通</span>, 是我觉得自己真正擅长的事。',
+      about1: '现在我为 <span class="hl">Lumos Robotics</span> 工作，负责具身智能数据生产平台软件，以及为海外商业化发展服务。',
+      about2: '我从总经理助理工作起步，后经历了完整的公司从 0 开始的创业，再到品牌打响，完成 80+ 万美金 <span class="hl">Kickstarter</span> 众筹订单，再到铺开全球分销商渠道，完成了对企业 0-1-10 的发展。',
+      about3: '我希望自己能有更综合的能力，不仅限于在企业内部提供真诚、专业服务和管理，对全球市场的拓展和营销，更能深入产品本身，从开发到测试再到走向市场的完整闭环。过去三年半的职业成长中，我完成了这些工作岗位的许多工作，建立了综合能力的闭环。',
+      about4: '我在业余时间进行力量训练，并为朋友提供健身指导。良好的精力和身体是职业发展的基础。此外就是 <span class="interest-word" data-icon="☕">咖啡</span> 和 <span class="interest-word" data-icon="📚">阅读</span>。',
       sectionExperience: 'Experience',
       date1: '2025 — Now',
       date2: '2024 — 2025',
@@ -744,13 +765,14 @@
     en: {
       heroTitle: "Hello, I'm Lexis Liew👋",
       heroSubtitle: 'Product & Go-to-Market',
-      heroIntro: 'I build products and bring them to market. At a robotics company, I turned those two tracks into one closed loop.',
+      heroIntro: 'Product and commercialization, together: GTM without BD instincts is not good product management.',
       navAbout: 'About',
       navExperience: 'Experience',
       navAsk: 'Ask me',
-      about1: 'I work on product and overseas go-to-market at <span class="hl">LUMOS Robotics</span>. The company builds data collection systems for embodied AI, helping robotics companies produce training data. I joined to handle overseas communications, then stepped into product design when I saw a gap, and now I run both product and commercialization tracks.',
-      about2: 'Before that, I helped build a 3D printer brand from zero and raised <span class="hl">$1M on Kickstarter</span>. Earlier, I worked in international trade, managing exhibitions, subsidies, and operating processes. The throughline is simple: translate technology into something the market understands, then bring market feedback back into the product.',
-      about3: 'I am not very interested in doing only one side of the work: building products without thinking about how they sell, or selling without caring whether the product is good. <span class="hl">Running the full path from product to market</span> is where I think I am strongest.',
+      about1: 'I currently work at <span class="hl">Lumos Robotics</span>, leading product for our embodied-AI data production platform and supporting our overseas commercialization efforts.',
+      about2: 'I started as a GM assistant, then went through a full company build from zero, helped break the brand into the market, closed an 80K+ <span class="hl">Kickstarter</span> campaign, and rolled out a global distributor network — taking a company from 0 to 1 to 10.',
+      about3: 'I want broader, more rounded capabilities — not just providing sincere, professional service and management inside a company and growing overseas markets, but also going deep into the product itself, from development to testing to launch. Over the past three and a half years, I have worked across these roles and built that closed loop of capability.',
+      about4: 'In my spare time I do strength training and coach friends on fitness — good energy and a healthy body are the foundation for a career. Beyond that, it is <span class="interest-word" data-icon="☕">coffee</span> and <span class="interest-word" data-icon="📚">reading</span>.',
       sectionExperience: 'Experience',
       date1: '2025 — Present',
       date2: '2024 — 2025',
