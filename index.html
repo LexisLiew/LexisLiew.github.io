@@ -16,8 +16,50 @@
   <style>
     @font-face {
       font-family: 'MiSans';
-      src: url('./fonts/MISANS-NORMAL.TTF') format('truetype');
+      src: url('./fonts/MISANS-EXTRALIGHT.TTF') format('truetype');
+      font-weight: 200;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'MiSans';
+      src: url('./fonts/MISANS-LIGHT.TTF') format('truetype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'MiSans';
+      src: url('./fonts/MISANS-REGULAR.TTF') format('truetype');
       font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'MiSans';
+      src: url('./fonts/MISANS-MEDIUM.TTF') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'MiSans';
+      src: url('./fonts/MISANS-DEMIBOLD.TTF') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'MiSans';
+      src: url('./fonts/MISANS-BOLD.TTF') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'MiSans';
+      src: url('./fonts/MISANS-HEAVY.TTF') format('truetype');
+      font-weight: 900;
       font-style: normal;
       font-display: swap;
     }
@@ -27,14 +69,14 @@
        所有颜色都在这里,改这里就能改全站配色
        ============================ */
     :root {
-      --bg: #11373a;              /* 页面背景 (螺子黛) */
-      --text: #e4eee6;            /* 主要文字颜色 (鸭卵青) */
-      --text-secondary: #c9d9ce;  /* 次要文字 */
-      --text-dim: #96a49a;        /* 最淡的文字 */
-      --accent: #b05b24;          /* 强调色 (提香红) */
-      --accent-dim: rgba(176,91,36,0.12);  /* 强调色的淡版本 */
-      --card-hover: rgba(176,91,36,0.08); /* 卡片 hover 背景 */
-      --border: rgba(228,238,230,0.15);      /* 边框颜色 */
+      --bg: #123f40;              /* 页面背景 */
+      --text: #eef7f1;            /* 主要文字颜色 */
+      --text-secondary: #bed1ca;  /* 次要文字 */
+      --text-dim: #839b95;        /* 最淡的文字 */
+      --accent: #6fd4bf;          /* 强调色 */
+      --accent-dim: rgba(111,212,191,0.12);  /* 强调色的淡版本 */
+      --card-hover: rgba(111,212,191,0.08); /* 卡片 hover 背景 */
+      --border: rgba(238,247,241,0.14);      /* 边框颜色 */
     }
 
     /* ============================
@@ -51,16 +93,40 @@
     body {
       /* 👇 正文字体使用本地 MiSans */
       font-family: 'MiSans', 'Xiaomi Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 400;
       background: var(--bg);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    body::before {
+      z-index: 0;
+      opacity: 1;
       background-image:
-        linear-gradient(135deg, rgba(228,238,230,0.06) 25%, transparent 25%),
-        linear-gradient(225deg, rgba(228,238,230,0.06) 25%, transparent 25%),
-        linear-gradient(45deg, rgba(228,238,230,0.06) 25%, transparent 25%),
-        linear-gradient(315deg, rgba(228,238,230,0.06) 25%, transparent 25%);
-      background-size: 40px 40px;
-      background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
+        linear-gradient(90deg, rgba(238,247,241,0.024) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(238,247,241,0.021) 1px, transparent 1px),
+        linear-gradient(45deg, transparent calc(50% - 0.5px), rgba(238,247,241,0.018) 50%, transparent calc(50% + 0.5px)),
+        linear-gradient(-45deg, transparent calc(50% - 0.5px), rgba(238,247,241,0.014) 50%, transparent calc(50% + 0.5px));
+      background-size: 30px 30px, 30px 30px, 120px 120px, 120px 120px;
+      background-position: 0 0, 0 0, 0 0, 0 0;
+    }
+
+    body::after {
+      z-index: 0;
+      background:
+        radial-gradient(circle at 64% 82%, rgba(238,247,241,0.045), transparent 24%),
+        linear-gradient(180deg, rgba(9,42,43,0.08), rgba(9,42,43,0.34));
     }
 
     /* 等宽字体 class, 用于日期、标签等 */
@@ -79,7 +145,7 @@
       width: 600px;
       height: 600px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(94,234,212,0.07) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(238,247,241,0.045) 0%, transparent 70%);
       transform: translate(-50%, -50%);
       z-index: 0;
       transition: opacity 0.3s;
@@ -124,11 +190,37 @@
        ============================ */
     .nav { margin-top: 3rem; }
 
+    .language-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1.5rem;
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(238,247,241,0.035);
+      color: var(--text-secondary);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .language-toggle:hover {
+      color: var(--text);
+      border-color: rgba(238,247,241,0.32);
+      background: rgba(238,247,241,0.075);
+    }
+    .language-toggle .toggle-current {
+      color: var(--accent);
+    }
+
     .nav-link {
       display: flex;
       align-items: center;
       gap: 12px;
       font-size: 11px;
+      font-weight: 600;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text-dim);
@@ -154,27 +246,40 @@
     }
 
     /* 社交链接 */
-    .social-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .social-links { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
     .social-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      justify-content: center;
       color: var(--text-dim);
       text-decoration: none;
-      font-size: 13px;
-      transition: color 0.2s;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(238,247,241,0.16);
+      border-radius: 8px;
+      background: rgba(238,247,241,0.04);
+      transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s;
       position: relative;
     }
-    .social-link::before {
-      content: attr(data-icon);
-      display: inline-block;
-      width: 1.2em;
-      text-align: center;
-      font-size: 0.95em;
-      line-height: 1;
-      color: var(--accent);
+    .social-link svg {
+      width: 19px;
+      height: 19px;
+      display: block;
+      fill: currentColor;
     }
-    .social-link:hover { color: var(--text); }
+    .social-link .icon-stroke {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .social-link:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.42);
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+    }
     .social-link.wechat {
       cursor: default;
     }
@@ -186,9 +291,9 @@
       min-width: 180px;
       padding: 12px 14px;
       border-radius: 14px;
-      background: rgba(228,238,230,0.96);
-      color: #11373a;
-      border: 1px solid rgba(17,55,58,0.12);
+      background: rgba(238,247,241,0.96);
+      color: #123f40;
+      border: 1px solid rgba(18,63,64,0.12);
       box-shadow: 0 12px 24px rgba(0,0,0,0.08);
       opacity: 0;
       visibility: hidden;
@@ -210,23 +315,24 @@
     .section { margin-bottom: 6rem; }
 
     .section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 2px;
+      font-family: 'MiSans', 'Xiaomi Sans', 'Inter', sans-serif;
+      font-size: 13px;
+      letter-spacing: 2.4px;
       text-transform: uppercase;
       color: var(--text-dim);
-      font-weight: 400;
+      font-weight: 700;
       margin-bottom: 2.5rem;
     }
 
     /* About 段落 */
     .about-text {
       font-size: 14px;
+      font-weight: 300;
       line-height: 1.85;
       color: var(--text-secondary);
       margin-bottom: 1rem;
     }
-    .about-text .hl { color: var(--text); } /* 高亮文字 */
+    .about-text .hl { color: var(--text); font-weight: 500; } /* 高亮文字 */
 
     /* ============================
        💼 经历卡片
@@ -247,19 +353,22 @@
     .exp-card:hover .exp-title { color: var(--accent); }
 
     .exp-date {
-      font-size: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.4px;
       color: var(--text-dim);
       padding-top: 4px;
     }
     .exp-title {
-      font-size: 15px;
-      font-weight: 500;
+      font-size: 17px;
+      font-weight: 600;
       margin-bottom: 8px;
       transition: color 0.2s;
-      line-height: 1.4;
+      line-height: 1.35;
     }
     .exp-desc {
       font-size: 13px;
+      font-weight: 300;
       color: var(--text-secondary);
       line-height: 1.75;
     }
@@ -272,7 +381,7 @@
       border-radius: 999px;
       background: var(--accent-dim);
       color: var(--accent);
-      font-weight: 500;
+      font-weight: 600;
       white-space: nowrap;
     }
 
@@ -280,8 +389,9 @@
        🤖 AI 问答区
        ============================ */
     .ai-chip {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
+      font-family: 'MiSans', 'Xiaomi Sans', 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
       padding: 8px 16px;
       border: 0.5px solid var(--border);
       background: transparent;
@@ -306,6 +416,7 @@
       color: var(--text);
       font-family: inherit;
       font-size: 13px;
+      font-weight: 300;
       outline: none;
       transition: border-color 0.2s;
     }
@@ -321,6 +432,7 @@
       cursor: pointer;
       font-family: 'Space Mono', monospace;
       font-size: 11px;
+      font-weight: 400;
       letter-spacing: 1px;
       transition: all 0.2s;
     }
@@ -330,6 +442,7 @@
     .chat-messages { margin-top: 20px; }
     .chat-bubble {
       font-size: 13px;
+      font-weight: 300;
       line-height: 1.75;
       color: var(--text-secondary);
       padding: 16px;
@@ -399,6 +512,7 @@
     .footer {
       padding: 3rem 0;
       font-size: 12px;
+      font-weight: 300;
       color: var(--text-dim);
       line-height: 1.8;
     }
@@ -417,35 +531,53 @@
   <div class="left">
     <div>
       <!-- 👇 改你的名字 -->
-      <h1 style="font-size: 28px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 8px;">
-        Lexis Liu
+      <h1 data-i18n="heroTitle" style="font-size: 32px; font-weight: 700; letter-spacing: 0; margin-bottom: 8px; line-height: 1.15;">
+        你好！我是刘含轩👋
       </h1>
 
       <!-- 👇 改你的头衔/一句话定位 -->
-      <p style="font-size: 16px; font-weight: 500; margin-bottom: 16px; color: var(--text-secondary);">
+      <p data-i18n="heroSubtitle" style="font-size: 17px; font-weight: 500; margin-bottom: 16px; color: var(--text-secondary);">
         Product & Go-to-Market
       </p>
 
       <!-- 👇 改你的简短介绍 -->
-      <p style="font-size: 14px; color: var(--text-dim); line-height: 1.65; max-width: 280px;">
+      <p data-i18n="heroIntro" style="font-size: 14px; font-weight: 300; color: var(--text-dim); line-height: 1.7; max-width: 290px;">
         做产品, 也做商业化。在一家机器人公司把这两件事串成了一个闭环。
       </p>
 
+      <button class="language-toggle" id="language-toggle" type="button" aria-label="Switch language">
+        <span class="toggle-current">中文</span>
+        <span>/</span>
+        <span>EN</span>
+      </button>
+
       <!-- 导航链接 (点击滚动到对应区域) -->
       <nav class="nav">
-        <a class="nav-link active" href="#about"><span class="bar"></span>About</a>
-        <a class="nav-link" href="#experience"><span class="bar"></span>Experience</a>
-        <a class="nav-link" href="#ask"><span class="bar"></span>Ask me</a>
+        <a class="nav-link active" href="#about"><span class="bar"></span><span data-i18n="navAbout">About</span></a>
+        <a class="nav-link" href="#experience"><span class="bar"></span><span data-i18n="navExperience">Experience</span></a>
+        <a class="nav-link" href="#ask"><span class="bar"></span><span data-i18n="navAsk">Ask me</span></a>
       </nav>
     </div>
 
     <!-- 👇 改你的社交链接 -->
     <div class="social-links">
-      <a class="social-link" data-icon="🔗" href="https://www.linkedin.com/in/lexisliu/" target="_blank">LinkedIn</a>
-      <a class="social-link" data-icon="✉️" href="mailto:lexis_liew@163.com">Email</a>
-      <div class="social-link wechat" data-icon="💬" tabindex="0" role="button" aria-label="WeChat">
-        WeChat
-        <div class="wechat-qrcode">二维码位置预留，晚些再提供</div>
+      <a class="social-link" href="https://www.linkedin.com/in/lexisliu/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.45 20.45h-3.56v-5.58c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.68H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.33 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.55V9h3.56v11.45Z"/>
+        </svg>
+      </a>
+      <a class="social-link" href="mailto:lexis_liew@163.com" aria-label="Email">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path class="icon-stroke" d="M4.75 6.75h14.5v10.5H4.75z"/>
+          <path class="icon-stroke" d="m5.25 7.25 6.75 5.5 6.75-5.5"/>
+        </svg>
+      </a>
+      <div class="social-link wechat" tabindex="0" role="button" aria-label="WeChat">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9.15 5.05c-4.05 0-7.15 2.58-7.15 5.74 0 1.72.93 3.25 2.39 4.31l-.62 2.1 2.45-1.23c.86.29 1.85.45 2.93.45.26 0 .52-.01.78-.04a5.85 5.85 0 0 1-.29-1.82c0-3.13 2.9-5.66 6.52-5.82-.86-2.16-3.58-3.69-7.01-3.69Zm-2.45 4.7a.86.86 0 1 1 0-1.72.86.86 0 0 1 0 1.72Zm4.86 0a.86.86 0 1 1 0-1.72.86.86 0 0 1 0 1.72Z"/>
+          <path d="M22 14.55c0-2.54-2.51-4.6-5.6-4.6s-5.6 2.06-5.6 4.6 2.51 4.6 5.6 4.6c.71 0 1.38-.11 2-.31l2.03 1.01-.5-1.72c1.26-.85 2.07-2.14 2.07-3.58Zm-7.43-.76a.72.72 0 1 1 0-1.44.72.72 0 0 1 0 1.44Zm3.68 0a.72.72 0 1 1 0-1.44.72.72 0 0 1 0 1.44Z"/>
+        </svg>
+        <div class="wechat-qrcode" data-i18n="wechatQr">二维码位置预留，晚些再提供</div>
       </div>
     </div>
   </div>
@@ -459,13 +591,13 @@
     <!-- ============ ABOUT 区 ============ -->
     <section class="section" id="about">
       <!-- 👇 改你的自我介绍,  <span class="hl">...</span> 会高亮显示 -->
-      <p class="about-text">
+      <p class="about-text" data-i18n-html="about1">
         我在 <span class="hl">LUMOS Robotics</span> 做产品和海外商业化。公司做具身智能的数据采集——帮机器人公司生产训练数据。我入职做海外传播, 三个月后发现产品端有真空, 就自己顶上去了, 现在同时跑产品设计和商业化两条线。
       </p>
-      <p class="about-text">
+      <p class="about-text" data-i18n-html="about2">
         在这之前, 我从零帮一个 3D 打印机品牌在 <span class="hl">Kickstarter 上拿了一百万美金</span>。再之前在外贸公司管展会、拿补贴、搭流程。三段经历跨度不小, 但做的事有一条线: 把技术翻译成市场听得懂的东西, 再把市场的反馈带回来改产品。
       </p>
-      <p class="about-text">
+      <p class="about-text" data-i18n-html="about3">
         我对"只做其中一头"不太感兴趣——产品做完不管怎么卖, 或者只管卖不管产品好不好, 这两种我都干不下去。<span class="hl">能把从产品到市场的全链路跑通</span>, 是我觉得自己真正擅长的事。
       </p>
     </section>
@@ -473,14 +605,14 @@
 
     <!-- ============ 工作经历区 ============ -->
     <section class="section" id="experience">
-      <p class="section-label">Experience</p>
+      <p class="section-label" data-i18n="sectionExperience">Experience</p>
 
       <!-- 👇 经历 1: LUMOS -->
       <div class="exp-card">
-        <p class="exp-date mono">2025 — Now</p>
+        <p class="exp-date mono" data-i18n="date1">2025 — Now</p>
         <div>
-          <p class="exp-title">Product & Overseas GTM · LUMOS Robotics</p>
-          <p class="exp-desc">
+          <p class="exp-title" data-i18n="exp1Title">Product & Overseas GTM · LUMOS Robotics</p>
+          <p class="exp-desc" data-i18n="exp1Desc">
             主导数采平台十余个模块的产品设计(排期管理、质检架构、状态机、权限体系等), 同时负责全线硬件产品文档、竞品分析, 并持续开拓欧洲、印度、东南亚等六个海外市场的经销商与 BD 线索。其中印度客户已到公司现场拜访, 下单意向高。
           </p>
           <div class="tags">
@@ -494,10 +626,10 @@
 
       <!-- 👇 经历 2: WonderMaker -->
       <div class="exp-card">
-        <p class="exp-date mono">2024 — 2025</p>
+        <p class="exp-date mono" data-i18n="date2">2024 — 2025</p>
         <div>
-          <p class="exp-title">Marketing Lead · WonderMaker 3D</p>
-          <p class="exp-desc">
+          <p class="exp-title" data-i18n="exp2Title">Marketing Lead · WonderMaker 3D</p>
+          <p class="exp-desc" data-i18n="exp2Desc">
             从零搭建品牌: 六个月社媒浏览量从零到 780 万, 建立 500 人日活社区, 两个月内组建 10+ 人 KOL/Beta 测试网络。主导 Kickstarter 全流程——策略、内容、广告、创作者外联——最终 1,114 人支持, 筹集 100 万美金。上线后拓展法国、荷兰、以色列等地经销商, 预订量超 1,600 台。
           </p>
           <div class="tags">
@@ -512,10 +644,10 @@
 
       <!-- 👇 经历 3: H&K -->
       <div class="exp-card">
-        <p class="exp-date mono">2022 — 2024</p>
+        <p class="exp-date mono" data-i18n="date3">2022 — 2024</p>
         <div>
-          <p class="exp-title">GM Assistant · H&K International Trade</p>
-          <p class="exp-desc">
+          <p class="exp-title" data-i18n="exp3Title">GM Assistant · H&K International Trade</p>
+          <p class="exp-desc" data-i18n="exp3Desc">
             组织 7 场国际展会(CES、广交会、汉诺威等)全流程, 接待 200+ 国际客户, 争取 30 万+ 政府补贴, 主导 400+ 场面试招入 27 人, 推动办公流程现代化改造减少 30% 人工环节。这段经历教会的不是某项技能, 是怎么把人和事组织起来让系统跑通。
           </p>
           <div class="tags">
@@ -526,21 +658,32 @@
           </div>
         </div>
       </div>
+
+      <!-- 👇 学历 -->
+      <div class="exp-card">
+        <p class="exp-date mono" data-i18n="dateEdu">2023.06</p>
+        <div>
+          <p class="exp-title">B.A. Economics · Zhejiang College of Shanghai University of Finance and Economics</p>
+          <p class="exp-desc" data-i18n="eduDesc">
+            上海财经大学浙江学院 · 经济学学士
+          </p>
+        </div>
+      </div>
     </section>
 
 
     <!-- ============ AI 问答区 ============ -->
     <section class="section" id="ask">
-      <p class="section-label">Ask me anything</p>
-      <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px;">
+      <p class="section-label" data-i18n="sectionAsk">Ask me anything</p>
+      <p data-i18n="askIntro" style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px;">
         这里接了 AI, 它读过我的完整经历。你可以问任何关于我背景的问题, 或者试试下面这几个:
       </p>
 
       <!-- 👇 改预设问题: 改 data-question 和按钮文字 -->
       <div id="preset-questions">
-        <button class="ai-chip" data-question="你为什么从营销转去做产品?">你为什么从营销转去做产品?</button>
-        <button class="ai-chip" data-question="你怎么理解 GTM?">你怎么理解 GTM?</button>
-        <button class="ai-chip" data-question="你觉得自己最大的短板是?">你觉得自己最大的短板是?</button>
+        <button class="ai-chip" data-i18n="q1" data-question-zh="你为什么从营销转去做产品?" data-question-en="Why did you move from marketing into product?">你为什么从营销转去做产品?</button>
+        <button class="ai-chip" data-i18n="q2" data-question-zh="你怎么理解 GTM?" data-question-en="How do you think about GTM?">你怎么理解 GTM?</button>
+        <button class="ai-chip" data-i18n="q3" data-question-zh="你觉得自己最大的短板是?" data-question-en="What is your biggest gap right now?">你觉得自己最大的短板是?</button>
       </div>
 
       <div class="chat-input-row">
@@ -554,9 +697,8 @@
 
 
     <!-- ============ 页脚 ============ -->
-    <footer class="footer">
-      <!-- 👇 改学历信息 -->
-      上海财经大学浙江学院 · 经济学学士 · 2023
+    <footer class="footer" data-i18n="footer">
+      Made by vibe, shaped by heart.
     </footer>
 
   </div>
@@ -564,6 +706,106 @@
 
 
 <script>
+  const translations = {
+    zh: {
+      heroTitle: '你好！我是刘含轩👋',
+      heroSubtitle: 'Product & Go-to-Market',
+      heroIntro: '做产品, 也做商业化。在一家机器人公司把这两件事串成了一个闭环。',
+      navAbout: 'About',
+      navExperience: 'Experience',
+      navAsk: 'Ask me',
+      about1: '我在 <span class="hl">LUMOS Robotics</span> 做产品和海外商业化。公司做具身智能的数据采集——帮机器人公司生产训练数据。我入职做海外传播, 三个月后发现产品端有真空, 就自己顶上去了, 现在同时跑产品设计和商业化两条线。',
+      about2: '在这之前, 我从零帮一个 3D 打印机品牌在 <span class="hl">Kickstarter 上拿了一百万美金</span>。再之前在外贸公司管展会、拿补贴、搭流程。三段经历跨度不小, 但做的事有一条线: 把技术翻译成市场听得懂的东西, 再把市场的反馈带回来改产品。',
+      about3: '我对"只做其中一头"不太感兴趣——产品做完不管怎么卖, 或者只管卖不管产品好不好, 这两种我都干不下去。<span class="hl">能把从产品到市场的全链路跑通</span>, 是我觉得自己真正擅长的事。',
+      sectionExperience: 'Experience',
+      date1: '2025 — Now',
+      date2: '2024 — 2025',
+      date3: '2022 — 2024',
+      dateEdu: '2023.06',
+      exp1Title: 'Product & Overseas GTM · LUMOS Robotics',
+      exp1Desc: '主导数采平台十余个模块的产品设计(排期管理、质检架构、状态机、权限体系等), 同时负责全线硬件产品文档、竞品分析, 并持续开拓欧洲、印度、东南亚等六个海外市场的经销商与 BD 线索。其中印度客户已到公司现场拜访, 下单意向高。',
+      exp2Title: 'Marketing Lead · WonderMaker 3D',
+      exp2Desc: '从零搭建品牌: 六个月社媒浏览量从零到 780 万, 建立 500 人日活社区, 两个月内组建 10+ 人 KOL/Beta 测试网络。主导 Kickstarter 全流程——策略、内容、广告、创作者外联——最终 1,114 人支持, 筹集 100 万美金。上线后拓展法国、荷兰、以色列等地经销商, 预订量超 1,600 台。',
+      exp3Title: 'GM Assistant · H&K International Trade',
+      exp3Desc: '组织 7 场国际展会(CES、广交会、汉诺威等)全流程, 接待 200+ 国际客户, 争取 30 万+ 政府补贴, 主导 400+ 场面试招入 27 人, 推动办公流程现代化改造减少 30% 人工环节。这段经历教会的不是某项技能, 是怎么把人和事组织起来让系统跑通。',
+      eduDesc: '上海财经大学浙江学院 · 经济学学士',
+      sectionAsk: 'Ask me anything',
+      askIntro: '这里接了 AI, 它读过我的完整经历。你可以问任何关于我背景的问题, 或者试试下面这几个:',
+      q1: '你为什么从营销转去做产品?',
+      q2: '你怎么理解 GTM?',
+      q3: '你觉得自己最大的短板是?',
+      wechatQr: '二维码位置预留，晚些再提供',
+      footer: 'Made by vibe, shaped by heart.',
+      placeholder: 'Type your question...',
+      loading: '思考中',
+      apiFallback: '抱歉, 出了点问题, 请稍后再试。',
+      networkError: '网络出了点问题, 请刷新页面重试。'
+    },
+    en: {
+      heroTitle: "Hello, I'm Lexis Liew👋",
+      heroSubtitle: 'Product & Go-to-Market',
+      heroIntro: 'I build products and bring them to market. At a robotics company, I turned those two tracks into one closed loop.',
+      navAbout: 'About',
+      navExperience: 'Experience',
+      navAsk: 'Ask me',
+      about1: 'I work on product and overseas go-to-market at <span class="hl">LUMOS Robotics</span>. The company builds data collection systems for embodied AI, helping robotics companies produce training data. I joined to handle overseas communications, then stepped into product design when I saw a gap, and now I run both product and commercialization tracks.',
+      about2: 'Before that, I helped build a 3D printer brand from zero and raised <span class="hl">$1M on Kickstarter</span>. Earlier, I worked in international trade, managing exhibitions, subsidies, and operating processes. The throughline is simple: translate technology into something the market understands, then bring market feedback back into the product.',
+      about3: 'I am not very interested in doing only one side of the work: building products without thinking about how they sell, or selling without caring whether the product is good. <span class="hl">Running the full path from product to market</span> is where I think I am strongest.',
+      sectionExperience: 'Experience',
+      date1: '2025 — Present',
+      date2: '2024 — 2025',
+      date3: '2022 — 2024',
+      dateEdu: 'Jun 2023',
+      exp1Title: 'Product & Overseas GTM · LUMOS Robotics',
+      exp1Desc: 'Led product design for 10+ modules in a data collection platform, including scheduling, QA architecture, state machines, and permission systems. Also owned hardware product documentation, competitor research, and overseas BD across Europe, India, Southeast Asia, and other markets.',
+      exp2Title: 'Marketing Lead · WonderMaker 3D',
+      exp2Desc: 'Built the brand from zero: reached 7.8M social views in six months, built a 500-member active community, and organized a 10+ person KOL/Beta testing network in two months. Led the full Kickstarter campaign and raised $1M from 1,114 backers, then expanded distributor leads across France, the Netherlands, Israel, and more.',
+      exp3Title: 'GM Assistant · H&K International Trade',
+      exp3Desc: 'Managed end-to-end operations for seven international trade shows, including CES, Canton Fair, and Hannover Messe. Hosted 200+ international clients, secured RMB 300K+ in government subsidies, led 400+ interviews to hire 27 people, and helped modernize internal workflows.',
+      eduDesc: 'B.A. Economics · Zhejiang College of Shanghai University of Finance and Economics',
+      sectionAsk: 'Ask me anything',
+      askIntro: 'This AI has read my full background. Ask anything about my experience, or try one of these:',
+      q1: 'Why did you move from marketing into product?',
+      q2: 'How do you think about GTM?',
+      q3: 'What is your biggest gap right now?',
+      wechatQr: 'QR code placeholder, coming later.',
+      footer: 'Made by vibe, shaped by heart.',
+      placeholder: 'Type your question...',
+      loading: 'Thinking',
+      apiFallback: 'Sorry, something went wrong. Please try again later.',
+      networkError: 'Network error. Please refresh and try again.'
+    }
+  };
+
+  let currentLang = 'zh';
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    const copy = translations[lang];
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (copy[key]) el.textContent = copy[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.dataset.i18nHtml;
+      if (copy[key]) el.innerHTML = copy[key];
+    });
+
+    document.querySelectorAll('.ai-chip').forEach(chip => {
+      chip.dataset.question = lang === 'zh' ? chip.dataset.questionZh : chip.dataset.questionEn;
+    });
+
+    inputEl.placeholder = copy.placeholder;
+    const current = document.querySelector('.toggle-current');
+    if (current) current.textContent = lang === 'zh' ? '中文' : 'EN';
+  }
+
+  document.getElementById('language-toggle')?.addEventListener('click', () => {
+    setLanguage(currentLang === 'zh' ? 'en' : 'zh');
+  });
+
   // ============================
   // 🔦 鼠标光晕跟随
   // ============================
@@ -621,15 +863,16 @@
 - 同时负责硬件产品文档、竞品分析, 以及欧洲/印度/东南亚等海外市场 BD
 - 之前在 WonderMaker 3D (番茄智能, 浙江) 做市场营销主管, 从零搭建品牌, Kickstarter 筹了 100 万美金, 1114 人支持, 社媒六个月做到 780 万浏览
 - 再之前在汉造贸易做总经理助理, 管展会(CES、广交会、汉诺威等)、政府关系、招聘
-- 上海财经大学浙江学院, 经济学学士, 2023
+- 上海财经大学浙江学院, 经济学学士, 2023 年 6 月毕业
 - 职业方向: GTM / COO 路径, 不打算做纯产品经理
 - 核心能力: 能把从产品到市场的全链路跑通, 不是只做其中一头的人
 - 正在学 Python 和编程 (用 Cursor), 目的是跟研发协作时能对齐
 
-用中文回答, 简洁有力, 每次回答控制在 3-5 句话。`;
+按后续语言指令回答, 简洁有力, 每次回答控制在 3-5 句话。`;
 
   const messagesEl = document.getElementById('chat-messages');
   const inputEl = document.getElementById('chat-input');
+  setLanguage(currentLang);
 
   // 预设问题按钮
   document.querySelectorAll('.ai-chip').forEach(chip => {
@@ -643,13 +886,14 @@
     const question = inputEl.value.trim();
     if (!question) return;
     inputEl.value = '';
+    const copy = translations[currentLang];
 
     // 显示用户的问题
     messagesEl.innerHTML += `<div class="chat-bubble user">${escapeHtml(question)}</div>`;
 
     // 显示加载状态
     const loadingId = 'loading-' + Date.now();
-    messagesEl.innerHTML += `<div class="chat-loading" id="${loadingId}">思考中</div>`;
+    messagesEl.innerHTML += `<div class="chat-loading" id="${loadingId}">${copy.loading}</div>`;
 
     try {
       /* ============================
@@ -669,13 +913,13 @@
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',             // 👈 可以换模型
           max_tokens: 500,
-          system: SYSTEM_PROMPT,
+          system: SYSTEM_PROMPT + (currentLang === 'en' ? '\n\nAnswer in English.' : '\n\n用中文回答。'),
           messages: [{ role: 'user', content: question }]
         })
       });
 
       const data = await response.json();
-      const answer = data.content?.[0]?.text || '抱歉, 出了点问题, 请稍后再试。';
+      const answer = data.content?.[0]?.text || copy.apiFallback;
 
       // 移除加载状态, 显示回答
       document.getElementById(loadingId)?.remove();
@@ -683,7 +927,7 @@
 
     } catch (err) {
       document.getElementById(loadingId)?.remove();
-      messagesEl.innerHTML += `<div class="chat-bubble">网络出了点问题, 请刷新页面重试。</div>`;
+      messagesEl.innerHTML += `<div class="chat-bubble">${copy.networkError}</div>`;
     }
   }
 
