@@ -8,12 +8,20 @@
 
   <!-- ============================
        🔤 字体设置
-       想换字体? 去 https://fonts.google.com 找,
-       把下面 family= 后面的名字换掉就行
+       已改为 Xiaomi 小米字体，浏览器会优先使用 MiSans / Xiaomi Sans
+       如果本机没有该字体，则继续回退到 Inter 和系统字体
        ============================ -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 
   <style>
+    @font-face {
+      font-family: 'MiSans';
+      src: url('./fonts/MISANS-NORMAL.TTF') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
     /* ============================
        🎨 颜色系统
        所有颜色都在这里,改这里就能改全站配色
@@ -37,12 +45,12 @@
     html {
       scroll-behavior: smooth;
       /* 👇 改字体大小: 改这个 font-size (默认 16px) */
-      font-size: 16px;
+      font-size: 18px;
     }
 
     body {
-      /* 👇 改正文字体: 把 'Inter' 换成你想要的字体名 */
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      /* 👇 正文字体使用本地 MiSans */
+      font-family: 'MiSans', 'Xiaomi Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
