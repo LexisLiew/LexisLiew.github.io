@@ -27,14 +27,14 @@
        所有颜色都在这里,改这里就能改全站配色
        ============================ */
     :root {
-      --bg: #0f172a;              /* 页面背景 (深蓝灰) */
-      --text: #e2e8f0;            /* 主要文字颜色 */
-      --text-secondary: #94a3b8;  /* 次要文字 (灰一点) */
-      --text-dim: #64748b;        /* 最淡的文字 (日期、提示) */
-      --accent: #5eead4;          /* 强调色 (青绿) — hover、tag 用 */
-      --accent-dim: rgba(94,234,212,0.1);  /* 强调色的淡版本 */
-      --card-hover: rgba(148,163,184,0.06); /* 卡片 hover 背景 */
-      --border: rgba(148,163,184,0.1);      /* 边框颜色 */
+      --bg: #11373a;              /* 页面背景 (螺子黛) */
+      --text: #e4eee6;            /* 主要文字颜色 (鸭卵青) */
+      --text-secondary: #c9d9ce;  /* 次要文字 */
+      --text-dim: #96a49a;        /* 最淡的文字 */
+      --accent: #b05b24;          /* 强调色 (提香红) */
+      --accent-dim: rgba(176,91,36,0.12);  /* 强调色的淡版本 */
+      --card-hover: rgba(176,91,36,0.08); /* 卡片 hover 背景 */
+      --border: rgba(228,238,230,0.15);      /* 边框颜色 */
     }
 
     /* ============================
@@ -54,6 +54,13 @@
       background: var(--bg);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
+      background-image:
+        linear-gradient(135deg, rgba(228,238,230,0.06) 25%, transparent 25%),
+        linear-gradient(225deg, rgba(228,238,230,0.06) 25%, transparent 25%),
+        linear-gradient(45deg, rgba(228,238,230,0.06) 25%, transparent 25%),
+        linear-gradient(315deg, rgba(228,238,230,0.06) 25%, transparent 25%);
+      background-size: 40px 40px;
+      background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
     }
 
     /* 等宽字体 class, 用于日期、标签等 */
@@ -147,14 +154,55 @@
     }
 
     /* 社交链接 */
-    .social-links { display: flex; gap: 20px; }
+    .social-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
     .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
       color: var(--text-dim);
       text-decoration: none;
       font-size: 13px;
       transition: color 0.2s;
+      position: relative;
+    }
+    .social-link::before {
+      content: attr(data-icon);
+      display: inline-block;
+      width: 1.2em;
+      text-align: center;
+      font-size: 0.95em;
+      line-height: 1;
+      color: var(--accent);
     }
     .social-link:hover { color: var(--text); }
+    .social-link.wechat {
+      cursor: default;
+    }
+    .wechat .wechat-qrcode {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 180px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(228,238,230,0.96);
+      color: #11373a;
+      border: 1px solid rgba(17,55,58,0.12);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+      z-index: 2;
+      font-size: 12px;
+      text-align: center;
+    }
+    .social-link.wechat:hover .wechat-qrcode,
+    .social-link.wechat:focus-within .wechat-qrcode {
+      opacity: 1;
+      visibility: visible;
+    }
 
     /* ============================
        📄 右侧内容区
@@ -393,9 +441,12 @@
 
     <!-- 👇 改你的社交链接 -->
     <div class="social-links">
-      <a class="social-link" href="https://github.com/LexisLiew" target="_blank">GitHub</a>
-      <a class="social-link" href="https://linkedin.com/in/lexis-liu" target="_blank">LinkedIn</a>
-      <a class="social-link" href="mailto:lexis_liew@163.com">Email</a>
+      <a class="social-link" data-icon="🔗" href="https://www.linkedin.com/in/lexisliu/" target="_blank">LinkedIn</a>
+      <a class="social-link" data-icon="✉️" href="mailto:lexis_liew@163.com">Email</a>
+      <div class="social-link wechat" data-icon="💬" tabindex="0" role="button" aria-label="WeChat">
+        WeChat
+        <div class="wechat-qrcode">二维码位置预留，晚些再提供</div>
+      </div>
     </div>
   </div>
 
