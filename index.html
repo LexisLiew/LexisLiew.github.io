@@ -145,7 +145,7 @@
       width: 600px;
       height: 600px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(238,247,241,0.045) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(238,247,241,0.056) 0%, transparent 70%);
       transform: translate(-50%, -50%);
       z-index: 0;
       transition: opacity 0.3s;
@@ -192,28 +192,40 @@
 
     .language-toggle {
       display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      align-items: baseline;
+      gap: 6px;
       margin-top: 1.5rem;
-      padding: 7px 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: rgba(238,247,241,0.035);
-      color: var(--text-secondary);
+      padding: 0;
+      border: none;
+      background: none;
+      color: var(--text-dim);
       font: inherit;
-      font-size: 12px;
-      font-weight: 500;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      transition: color 0.2s;
     }
-    .language-toggle:hover {
-      color: var(--text);
-      border-color: rgba(238,247,241,0.32);
-      background: rgba(238,247,241,0.075);
+    .language-toggle:hover { color: var(--text); }
+    .language-toggle .toggle-sep {
+      color: var(--text-dim);
+      opacity: 0.5;
     }
     .language-toggle .toggle-current {
       color: var(--accent);
+      position: relative;
     }
+    .language-toggle .toggle-current::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -3px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .language-toggle .toggle-other { opacity: 0.55; }
 
     .nav-link {
       display: flex;
@@ -331,25 +343,30 @@
 
     .interest-word {
       position: relative;
-      cursor: default;
-      border-bottom: 1px dotted var(--text-dim);
+      display: inline-block;
+      font-weight: 500;
+      background-image: linear-gradient(90deg, #ff6b6b, #feca57, #1dd1a1, #54a0ff, #c56cf0, #ff6b6b);
+      background-size: 250% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: var(--text-secondary);
+      transition: background-position 0.6s ease;
     }
-    .interest-word::after {
-      content: attr(data-icon);
-      position: absolute;
-      left: 50%;
-      bottom: 100%;
-      transform: translate(-50%, -6px) scale(0.6);
-      font-size: 20px;
-      line-height: 1;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.18s, transform 0.18s;
+    .interest-word:hover {
+      color: transparent;
+      background-position: 0% 0;
+      animation: interest-jump 0.5s ease;
     }
-    .interest-word:hover::after {
-      opacity: 1;
-      transform: translate(-50%, -10px) scale(1);
+    @keyframes interest-jump {
+      0%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+      55% { transform: translateY(1px); }
+      75% { transform: translateY(-2px); }
     }
+    .interest-word[data-icon="🏋️"] { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="26">🏋️</text></svg>') 16 16, auto; }
+    .interest-word[data-icon="☕"] { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="26">☕</text></svg>') 16 16, auto; }
+    .interest-word[data-icon="📚"] { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="26">📚</text></svg>') 16 16, auto; }
 
     /* ============================
        💼 经历卡片
@@ -367,27 +384,49 @@
       color: inherit;
     }
     .exp-card:hover { background: var(--card-hover); }
-    .exp-card:hover .exp-title { color: var(--accent); }
+    .exp-card:hover .exp-role { color: var(--accent); }
 
     .exp-date {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
       letter-spacing: 0.4px;
       color: var(--text-dim);
       padding-top: 4px;
     }
-    .exp-title {
+    .exp-role {
       font-size: 17px;
       font-weight: 600;
-      margin-bottom: 8px;
       transition: color 0.2s;
       line-height: 1.35;
+    }
+    .exp-org {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      margin-top: 2px;
     }
     .exp-desc {
       font-size: 13px;
       font-weight: 300;
       color: var(--text-secondary);
       line-height: 1.75;
+    }
+    .exp-desc.exp-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .exp-desc.exp-list li {
+      position: relative;
+      padding-left: 14px;
+    }
+    .exp-desc.exp-list li + li { margin-top: 6px; }
+    .exp-desc.exp-list li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--text-dim);
     }
 
     /* 技能标签 */
@@ -403,88 +442,112 @@
     }
 
     /* ============================
-       🤖 AI 问答区
+       🚀 项目展示区
        ============================ */
-    .ai-chip {
-      font-family: 'MiSans', 'Xiaomi Sans', 'Inter', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      padding: 8px 16px;
-      border: 0.5px solid var(--border);
-      background: transparent;
-      color: var(--text-secondary);
+    .project-card {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 20px;
+      padding: 20px 16px;
+      margin: 0 -16px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: border-color 0.2s, color 0.2s, background 0.2s;
-      display: inline-block;
-      margin: 0 6px 8px 0;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: inherit;
     }
-    .ai-chip:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-dim);
-    }
+    .project-card:hover { background: var(--card-hover); }
+    .project-card:hover .project-title { color: var(--accent); }
 
-    .chat-input-row { display: flex; margin-top: 16px; }
-    .chat-input {
-      flex: 1;
-      background: transparent;
-      border: 0.5px solid var(--border);
-      padding: 12px 16px;
-      color: var(--text);
-      font-family: inherit;
+    .project-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(238,247,241,0.06);
+      border: 1px solid var(--border);
+    }
+    .project-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .project-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      transition: color 0.2s;
+      line-height: 1.35;
+    }
+    .project-title .arrow {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .project-card:hover .project-title .arrow {
+      transform: translate(2px, -2px);
+    }
+    .project-desc {
       font-size: 13px;
       font-weight: 300;
-      outline: none;
-      transition: border-color 0.2s;
+      color: var(--text-secondary);
+      line-height: 1.75;
     }
-    .chat-input:focus { border-color: var(--accent); }
-    .chat-input::placeholder { color: var(--text-dim); }
 
-    .chat-send {
-      border: 0.5px solid var(--border);
-      border-left: none;
+    /* ============================
+       💬 Ask Me 问答区
+       ============================ */
+    .qa-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .qa-item:first-child { border-top: 1px solid var(--border); }
+
+    .qa-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 0;
       background: transparent;
-      color: var(--text-dim);
-      padding: 12px 20px;
+      border: none;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: left;
       cursor: pointer;
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 1px;
-      transition: all 0.2s;
+      transition: color 0.2s;
     }
-    .chat-send:hover { color: var(--accent); border-color: var(--accent); }
+    .qa-question:hover { color: var(--accent); }
 
-    /* AI 回复气泡 */
-    .chat-messages { margin-top: 20px; }
-    .chat-bubble {
+    .qa-caret {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: var(--text-dim);
+      transition: transform 0.25s ease, color 0.2s;
+    }
+    .qa-question:hover .qa-caret { color: var(--accent); }
+    .qa-item.open .qa-caret { transform: rotate(180deg); color: var(--accent); }
+
+    .qa-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .qa-item.open .qa-answer { max-height: 240px; }
+    .qa-answer p {
       font-size: 13px;
       font-weight: 300;
       line-height: 1.75;
       color: var(--text-secondary);
-      padding: 16px;
-      background: rgba(148,163,184,0.06);
-      border-radius: 8px;
-      margin-bottom: 12px;
-    }
-    .chat-bubble.user {
-      background: var(--accent-dim);
-      color: var(--accent);
-      text-align: right;
-    }
-    .chat-loading {
-      color: var(--text-dim);
-      font-size: 13px;
-      padding: 16px;
-    }
-    .chat-loading::after {
-      content: '';
-      animation: dots 1.5s infinite;
-    }
-    @keyframes dots {
-      0%, 20% { content: '.'; }
-      40% { content: '..'; }
-      60%, 100% { content: '...'; }
+      padding-bottom: 18px;
     }
 
     /* ============================
@@ -515,6 +578,11 @@
         grid-template-columns: 1fr;  /* 经历卡片也变成单栏 */
         gap: 4px;
       }
+      .project-card {
+        grid-template-columns: 1fr;  /* 项目卡片也变成单栏 */
+        gap: 10px;
+      }
+      .project-thumb { max-width: 200px; }
       .section-label { display: block !important; }
     }
 
@@ -563,15 +631,16 @@
       </p>
 
       <button class="language-toggle" id="language-toggle" type="button" aria-label="Switch language">
-        <span class="toggle-current">中文</span>
-        <span>/</span>
-        <span>EN</span>
+        <span class="toggle-zh toggle-current">中</span>
+        <span class="toggle-sep">/</span>
+        <span class="toggle-en toggle-other">EN</span>
       </button>
 
       <!-- 导航链接 (点击滚动到对应区域) -->
       <nav class="nav">
         <a class="nav-link active" href="#about"><span class="bar"></span><span data-i18n="navAbout">About</span></a>
         <a class="nav-link" href="#experience"><span class="bar"></span><span data-i18n="navExperience">Experience</span></a>
+        <a class="nav-link" href="#projects"><span class="bar"></span><span data-i18n="navProjects">Projects</span></a>
         <a class="nav-link" href="#ask"><span class="bar"></span><span data-i18n="navAsk">Ask me</span></a>
       </nav>
     </div>
@@ -618,7 +687,7 @@
         我希望自己能有更综合的能力，不仅限于在企业内部提供真诚、专业服务和管理，对全球市场的拓展和营销，更能深入产品本身，从开发到测试再到走向市场的完整闭环。过去三年半的职业成长中，我完成了这些工作岗位的许多工作，建立了综合能力的闭环。
       </p>
       <p class="about-text" data-i18n-html="about4">
-        我在业余时间进行力量训练，并为朋友提供健身指导。良好的精力和身体是职业发展的基础。此外就是 <span class="interest-word" data-icon="☕">咖啡</span> 和 <span class="interest-word" data-icon="📚">阅读</span>。
+        我在业余时间进行 <span class="interest-word" data-icon="🏋️">力量训练</span>，并为朋友提供健身指导。良好的精力和身体是职业发展的基础。此外就是 <span class="interest-word" data-icon="☕">咖啡</span> 和 <span class="interest-word" data-icon="📚">阅读</span>。
       </p>
     </section>
 
@@ -631,10 +700,14 @@
       <a class="exp-card" href="https://www.lumosbot.tech" target="_blank" rel="noopener">
         <p class="exp-date mono" data-i18n="date1">2025 — Now</p>
         <div>
-          <p class="exp-title" data-i18n="exp1Title">Product & Overseas GTM · LUMOS Robotics</p>
-          <p class="exp-desc" data-i18n="exp1Desc">
-            主导数采平台十余个模块的产品设计(排期管理、质检架构、状态机、权限体系等), 同时负责全线硬件产品文档、竞品分析, 并持续开拓欧洲、印度、东南亚等六个海外市场的经销商与 BD 线索。其中印度客户已到公司现场拜访, 下单意向高。
-          </p>
+          <p class="exp-role" data-i18n="exp1Role">产品经理 & 商业化BD</p>
+          <p class="exp-org" data-i18n="exp1Org">Lumos Robotics</p>
+          <ul class="exp-desc exp-list" data-i18n-html="exp1Desc">
+            <li>数据生产平台及Pipeline软件产品设计，构建数据生产、权限管理、设备管理、真值管理，及数据GT标注、任务-动作语义等Pipeline加工生产生态。</li>
+            <li>国内首个具身智能数据商城产品设计，及打通后端链路，完成数据生产——线上售卖链路闭环。</li>
+            <li>UMI硬件产品规格、产品手册等文档撰写，输出竞品调研报告。</li>
+            <li>持续开拓欧洲、印度、东南亚等多个海外市场，获取研究院、专业分销商等多渠道BD线索，促成交易超100万元。</li>
+          </ul>
           <div class="tags">
             <span class="tag">Product Design</span>
             <span class="tag">PRD</span>
@@ -648,10 +721,15 @@
       <a class="exp-card" href="https://www.wondermaker3d.com" target="_blank" rel="noopener">
         <p class="exp-date mono" data-i18n="date2">2024 — 2025</p>
         <div>
-          <p class="exp-title" data-i18n="exp2Title">Marketing Lead · WonderMaker 3D</p>
-          <p class="exp-desc" data-i18n="exp2Desc">
-            从零搭建品牌: 六个月社媒浏览量从零到 780 万, 建立 500 人日活社区, 两个月内组建 10+ 人 KOL/Beta 测试网络。主导 Kickstarter 全流程——策略、内容、广告、创作者外联——最终 1,114 人支持, 筹集 100 万美金。上线后拓展法国、荷兰、以色列等地经销商, 预订量超 1,600 台。
-          </p>
+          <p class="exp-role" data-i18n="exp2Role">品牌营销全案负责人 & 商业化BD</p>
+          <p class="exp-org" data-i18n="exp2Org">WonderMaker 3D</p>
+          <ul class="exp-desc exp-list" data-i18n-html="exp2Desc">
+            <li>从0搭建3D打印机品牌WonderMaker，品牌起步社媒累计浏览量从0到800万突破，FB Group及Discord Server 日活超300人次。</li>
+            <li>0佣金搭建海外 10+人 KOL / Beta/ Volunteer团队。</li>
+            <li>借势设立创始人IP，为深入用户调研、获取用户对初创品牌信任度及品牌声誉提供极佳助推。</li>
+            <li>Kickstarter众筹获1,114位Backer支持，总筹金额超90万美元。</li>
+            <li>主动拓展法国、俄罗斯、以色列、捷克等多国分销商，预订单数量超1600台设备。</li>
+          </ul>
           <div class="tags">
             <span class="tag">GTM</span>
             <span class="tag">Brand 0→1</span>
@@ -666,10 +744,14 @@
       <a class="exp-card" href="https://www.hnk-intl.com" target="_blank" rel="noopener">
         <p class="exp-date mono" data-i18n="date3">2022 — 2024</p>
         <div>
-          <p class="exp-title" data-i18n="exp3Title">GM Assistant · H&K International Trade</p>
-          <p class="exp-desc" data-i18n="exp3Desc">
-            组织 7 场国际展会(CES、广交会、汉诺威等)全流程, 接待 200+ 国际客户, 争取 30 万+ 政府补贴, 主导 400+ 场面试招入 27 人, 推动办公流程现代化改造减少 30% 人工环节。这段经历教会的不是某项技能, 是怎么把人和事组织起来让系统跑通。
-          </p>
+          <p class="exp-role" data-i18n="exp3Role">GM Assistant</p>
+          <p class="exp-org" data-i18n="exp3Org">H&K International Trade</p>
+          <ul class="exp-desc exp-list" data-i18n-html="exp3Desc">
+            <li>组织7场国内外展会（CES、广交会、汉诺威工业展，etc.）。</li>
+            <li>接待200+人国际客户，制定分级接待方案。</li>
+            <li>主导300+场面试，招聘人才27人+，持续扩充优质团队。</li>
+            <li>推动公司SOP优化及办公自动化，提升财务、业务、人事等各个部门效率超30%。</li>
+          </ul>
           <div class="tags">
             <span class="tag">Trade Shows</span>
             <span class="tag">Operations</span>
@@ -683,36 +765,93 @@
       <div class="exp-card">
         <p class="exp-date mono" data-i18n="dateEdu">2023.06</p>
         <div>
-          <p class="exp-title">B.A. Economics · Zhejiang College of Shanghai University of Finance and Economics</p>
-          <p class="exp-desc" data-i18n="eduDesc">
-            上海财经大学浙江学院 · 经济学学士
-          </p>
+          <p class="exp-role" data-i18n="eduRole">经济学学士</p>
+          <p class="exp-org" data-i18n="eduOrg">上海财经大学浙江学院</p>
         </div>
       </div>
     </section>
 
 
-    <!-- ============ AI 问答区 ============ -->
+    <!-- ============ 项目展示区 ============ -->
+    <!-- 👇 占位内容, 等拿到真实链接/文案/缩略图后替换 -->
+    <section class="section" id="projects">
+      <p class="section-label" data-i18n="sectionProjects">Projects</p>
+
+      <!-- 👇 项目 1: 占位 -->
+      <a class="project-card" href="#" target="_blank" rel="noopener">
+        <div class="project-thumb"></div>
+        <div>
+          <p class="project-title">
+            <span data-i18n="project1Title">项目名称占位</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </p>
+          <p class="project-desc" data-i18n="project1Desc">
+            这里放项目简介, 等拿到文案后替换。
+          </p>
+          <div class="tags">
+            <span class="tag">Tag 1</span>
+            <span class="tag">Tag 2</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 👇 项目 2: 占位 -->
+      <a class="project-card" href="#" target="_blank" rel="noopener">
+        <div class="project-thumb"></div>
+        <div>
+          <p class="project-title">
+            <span data-i18n="project2Title">项目名称占位</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </p>
+          <p class="project-desc" data-i18n="project2Desc">
+            这里放项目简介, 等拿到文案后替换。
+          </p>
+          <div class="tags">
+            <span class="tag">Tag 1</span>
+            <span class="tag">Tag 2</span>
+          </div>
+        </div>
+      </a>
+    </section>
+
+
+    <!-- ============ AskMe 区 ============ -->
     <section class="section" id="ask">
       <p class="section-label" data-i18n="sectionAsk">Ask me anything</p>
       <p data-i18n="askIntro" style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px;">
-        这里接了 AI, 它读过我的完整经历。你可以问任何关于我背景的问题, 或者试试下面这几个:
+        点击下面的问题, 看看我的回答:
       </p>
 
-      <!-- 👇 改预设问题: 改 data-question 和按钮文字 -->
-      <div id="preset-questions">
-        <button class="ai-chip" data-i18n="q1" data-question-zh="你为什么从营销转去做产品?" data-question-en="Why did you move from marketing into product?">你为什么从营销转去做产品?</button>
-        <button class="ai-chip" data-i18n="q2" data-question-zh="你怎么理解 GTM?" data-question-en="How do you think about GTM?">你怎么理解 GTM?</button>
-        <button class="ai-chip" data-i18n="q3" data-question-zh="你觉得自己最大的短板是?" data-question-en="What is your biggest gap right now?">你觉得自己最大的短板是?</button>
+      <!-- 👇 改问答内容: 改 data-i18n 对应的 q1/a1, q2/a2, q3/a3 -->
+      <div id="qa-list">
+        <div class="qa-item">
+          <button class="qa-question" type="button" aria-expanded="false">
+            <span data-i18n="q1">你为什么从营销转去做产品?</span>
+            <svg class="qa-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="qa-answer">
+            <p data-i18n="a1">入职做海外传播时发现产品端有真空, 没人推进就没人做, 我就顶上去了。做下来发现这两件事其实是一条线: 不懂产品就不知道怎么卖, 不接触市场就不知道产品该往哪改。</p>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-question" type="button" aria-expanded="false">
+            <span data-i18n="q2">你怎么理解 GTM?</span>
+            <svg class="qa-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="qa-answer">
+            <p data-i18n="a2">GTM 不是接到产品后去找渠道, 而是从产品定义阶段就要想清楚谁会买、为什么买、怎么触达。我在 WonderMaker 和 Lumos 都是这么做的: 一边搭产品, 一边同步验证市场。</p>
+          </div>
+        </div>
+        <div class="qa-item">
+          <button class="qa-question" type="button" aria-expanded="false">
+            <span data-i18n="q3">你觉得自己最大的短板是?</span>
+            <svg class="qa-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="qa-answer">
+            <p data-i18n="a3">技术背景不是工程出身, 跟研发对齐细节时需要更多沟通成本。正在学 Python, 目的是能看懂实现逻辑, 减少这中间的信息损耗。</p>
+          </div>
+        </div>
       </div>
-
-      <div class="chat-input-row">
-        <input class="chat-input" id="chat-input" type="text" placeholder="Type your question..." 
-               onkeydown="if(event.key==='Enter')sendQuestion()">
-        <button class="chat-send" onclick="sendQuestion()">SEND</button>
-      </div>
-
-      <div class="chat-messages" id="chat-messages"></div>
     </section>
 
 
@@ -733,34 +872,43 @@
       heroIntro: '做产品, 也做商业化：不想做BD的GTM不是好的产品经理',
       navAbout: 'About',
       navExperience: 'Experience',
+      navProjects: 'Projects',
       navAsk: 'Ask me',
       about1: '现在我为 <span class="hl">Lumos Robotics</span> 工作，负责具身智能数据生产平台软件，以及为海外商业化发展服务。',
       about2: '我从总经理助理工作起步，后经历了完整的公司从 0 开始的创业，再到品牌打响，完成 80+ 万美金 <span class="hl">Kickstarter</span> 众筹订单，再到铺开全球分销商渠道，完成了对企业 0-1-10 的发展。',
       about3: '我希望自己能有更综合的能力，不仅限于在企业内部提供真诚、专业服务和管理，对全球市场的拓展和营销，更能深入产品本身，从开发到测试再到走向市场的完整闭环。过去三年半的职业成长中，我完成了这些工作岗位的许多工作，建立了综合能力的闭环。',
-      about4: '我在业余时间进行力量训练，并为朋友提供健身指导。良好的精力和身体是职业发展的基础。此外就是 <span class="interest-word" data-icon="☕">咖啡</span> 和 <span class="interest-word" data-icon="📚">阅读</span>。',
+      about4: '我在业余时间进行 <span class="interest-word" data-icon="🏋️">力量训练</span>，并为朋友提供健身指导。良好的精力和身体是职业发展的基础。此外就是 <span class="interest-word" data-icon="☕">咖啡</span> 和 <span class="interest-word" data-icon="📚">阅读</span>。',
       sectionExperience: 'Experience',
       date1: '2025 — Now',
       date2: '2024 — 2025',
       date3: '2022 — 2024',
       dateEdu: '2023.06',
-      exp1Title: 'Product & Overseas GTM · LUMOS Robotics',
-      exp1Desc: '主导数采平台十余个模块的产品设计(排期管理、质检架构、状态机、权限体系等), 同时负责全线硬件产品文档、竞品分析, 并持续开拓欧洲、印度、东南亚等六个海外市场的经销商与 BD 线索。其中印度客户已到公司现场拜访, 下单意向高。',
-      exp2Title: 'Marketing Lead · WonderMaker 3D',
-      exp2Desc: '从零搭建品牌: 六个月社媒浏览量从零到 780 万, 建立 500 人日活社区, 两个月内组建 10+ 人 KOL/Beta 测试网络。主导 Kickstarter 全流程——策略、内容、广告、创作者外联——最终 1,114 人支持, 筹集 100 万美金。上线后拓展法国、荷兰、以色列等地经销商, 预订量超 1,600 台。',
-      exp3Title: 'GM Assistant · H&K International Trade',
-      exp3Desc: '组织 7 场国际展会(CES、广交会、汉诺威等)全流程, 接待 200+ 国际客户, 争取 30 万+ 政府补贴, 主导 400+ 场面试招入 27 人, 推动办公流程现代化改造减少 30% 人工环节。这段经历教会的不是某项技能, 是怎么把人和事组织起来让系统跑通。',
-      eduDesc: '上海财经大学浙江学院 · 经济学学士',
+      exp1Role: '产品经理 & 商业化BD',
+      exp1Org: 'Lumos Robotics',
+      exp1Desc: '<li>数据生产平台及Pipeline软件产品设计，构建数据生产、权限管理、设备管理、真值管理，及数据GT标注、任务-动作语义等Pipeline加工生产生态。</li><li>国内首个具身智能数据商城产品设计，及打通后端链路，完成数据生产——线上售卖链路闭环。</li><li>UMI硬件产品规格、产品手册等文档撰写，输出竞品调研报告。</li><li>持续开拓欧洲、印度、东南亚等多个海外市场，获取研究院、专业分销商等多渠道BD线索，促成交易超100万元。</li>',
+      exp2Role: '品牌营销全案负责人 & 商业化BD',
+      exp2Org: 'WonderMaker 3D',
+      exp2Desc: '<li>从0搭建3D打印机品牌WonderMaker，品牌起步社媒累计浏览量从0到800万突破，FB Group及Discord Server 日活超300人次。</li><li>0佣金搭建海外 10+人 KOL / Beta/ Volunteer团队。</li><li>借势设立创始人IP，为深入用户调研、获取用户对初创品牌信任度及品牌声誉提供极佳助推。</li><li>Kickstarter众筹获1,114位Backer支持，总筹金额超90万美元。</li><li>主动拓展法国、俄罗斯、以色列、捷克等多国分销商，预订单数量超1600台设备。</li>',
+      exp3Role: 'GM Assistant',
+      exp3Org: 'H&K International Trade',
+      exp3Desc: '<li>组织7场国内外展会（CES、广交会、汉诺威工业展，etc.）。</li><li>接待200+人国际客户，制定分级接待方案。</li><li>主导300+场面试，招聘人才27人+，持续扩充优质团队。</li><li>推动公司SOP优化及办公自动化，提升财务、业务、人事等各个部门效率超30%。</li>',
+      eduRole: '经济学学士',
+      eduOrg: '上海财经大学浙江学院',
+      sectionProjects: 'Projects',
+      project1Title: '项目名称占位',
+      project1Desc: '这里放项目简介, 等拿到文案后替换。',
+      project2Title: '项目名称占位',
+      project2Desc: '这里放项目简介, 等拿到文案后替换。',
       sectionAsk: 'Ask me anything',
-      askIntro: '这里接了 AI, 它读过我的完整经历。你可以问任何关于我背景的问题, 或者试试下面这几个:',
+      askIntro: '点击下面的问题, 看看我的回答:',
       q1: '你为什么从营销转去做产品?',
+      a1: '入职做海外传播时发现产品端有真空, 没人推进就没人做, 我就顶上去了。做下来发现这两件事其实是一条线: 不懂产品就不知道怎么卖, 不接触市场就不知道产品该往哪改。',
       q2: '你怎么理解 GTM?',
+      a2: 'GTM 不是接到产品后去找渠道, 而是从产品定义阶段就要想清楚谁会买、为什么买、怎么触达。我在 WonderMaker 和 Lumos 都是这么做的: 一边搭产品, 一边同步验证市场。',
       q3: '你觉得自己最大的短板是?',
-      wechatQr: '二维码位置预留，晚些再提供',
-      footer: 'Made by vibe, shaped by heart.',
-      placeholder: 'Type your question...',
-      loading: '思考中',
-      apiFallback: '抱歉, 出了点问题, 请稍后再试。',
-      networkError: '网络出了点问题, 请刷新页面重试。'
+      a3: '技术背景不是工程出身, 跟研发对齐细节时需要更多沟通成本。正在学 Python, 目的是能看懂实现逻辑, 减少这中间的信息损耗。',
+      wechatQr: '二维码位置预留',
+      footer: 'Made by vibe, shaped by heart.'
     },
     en: {
       heroTitle: "Hello, I'm Lexis Liew👋",
@@ -768,34 +916,43 @@
       heroIntro: 'Product and commercialization, together: GTM without BD instincts is not good product management.',
       navAbout: 'About',
       navExperience: 'Experience',
+      navProjects: 'Projects',
       navAsk: 'Ask me',
       about1: 'I currently work at <span class="hl">Lumos Robotics</span>, leading product for our embodied-AI data production platform and supporting our overseas commercialization efforts.',
       about2: 'I started as a GM assistant, then went through a full company build from zero, helped break the brand into the market, closed an 80K+ <span class="hl">Kickstarter</span> campaign, and rolled out a global distributor network — taking a company from 0 to 1 to 10.',
       about3: 'I want broader, more rounded capabilities — not just providing sincere, professional service and management inside a company and growing overseas markets, but also going deep into the product itself, from development to testing to launch. Over the past three and a half years, I have worked across these roles and built that closed loop of capability.',
-      about4: 'In my spare time I do strength training and coach friends on fitness — good energy and a healthy body are the foundation for a career. Beyond that, it is <span class="interest-word" data-icon="☕">coffee</span> and <span class="interest-word" data-icon="📚">reading</span>.',
+      about4: 'In my spare time I do <span class="interest-word" data-icon="🏋️">strength training</span> and coach friends on fitness — good energy and a healthy body are the foundation for a career. Beyond that, it is <span class="interest-word" data-icon="☕">coffee</span> and <span class="interest-word" data-icon="📚">reading</span>.',
       sectionExperience: 'Experience',
       date1: '2025 — Present',
       date2: '2024 — 2025',
       date3: '2022 — 2024',
       dateEdu: 'Jun 2023',
-      exp1Title: 'Product & Overseas GTM · LUMOS Robotics',
-      exp1Desc: 'Led product design for 10+ modules in a data collection platform, including scheduling, QA architecture, state machines, and permission systems. Also owned hardware product documentation, competitor research, and overseas BD across Europe, India, Southeast Asia, and other markets.',
-      exp2Title: 'Marketing Lead · WonderMaker 3D',
-      exp2Desc: 'Built the brand from zero: reached 7.8M social views in six months, built a 500-member active community, and organized a 10+ person KOL/Beta testing network in two months. Led the full Kickstarter campaign and raised $1M from 1,114 backers, then expanded distributor leads across France, the Netherlands, Israel, and more.',
-      exp3Title: 'GM Assistant · H&K International Trade',
-      exp3Desc: 'Managed end-to-end operations for seven international trade shows, including CES, Canton Fair, and Hannover Messe. Hosted 200+ international clients, secured RMB 300K+ in government subsidies, led 400+ interviews to hire 27 people, and helped modernize internal workflows.',
-      eduDesc: 'B.A. Economics · Zhejiang College of Shanghai University of Finance and Economics',
+      exp1Role: 'Product Manager & Commercialization BD',
+      exp1Org: 'Lumos Robotics',
+      exp1Desc: '<li>Designed the data production platform and pipeline software, building out data production, permission management, device management, ground-truth management, and the GT annotation / task-action semantics pipeline ecosystem.</li><li>Designed China\'s first embodied-AI data marketplace product and connected the backend pipeline, closing the loop from data production to online sale.</li><li>Wrote UMI hardware specs, product manuals, and competitor research reports.</li><li>Continued opening up markets across Europe, India, Southeast Asia and more, sourcing BD leads from research institutes and specialist distributors, closing deals worth RMB 1M+.</li>',
+      exp2Role: 'Brand & Marketing Lead, Commercialization BD',
+      exp2Org: 'WonderMaker 3D',
+      exp2Desc: '<li>Built the 3D printer brand WonderMaker from zero — social views grew from 0 to 8M, with 300+ daily actives across the FB Group and Discord server.</li><li>Built a 10+ person overseas KOL / Beta / Volunteer team at zero commission.</li><li>Established a founder IP to support deeper user research and build trust and brand reputation for the new brand.</li><li>Raised $900K+ on Kickstarter from 1,114 backers.</li><li>Proactively expanded distributors across France, Russia, Israel, Czech Republic and more, with 1,600+ units pre-ordered.</li>',
+      exp3Role: 'GM Assistant',
+      exp3Org: 'H&K International Trade',
+      exp3Desc: '<li>Organized 7 domestic and international trade shows (CES, Canton Fair, Hannover Messe, etc.).</li><li>Hosted 200+ international clients with a tiered hospitality plan.</li><li>Led 300+ interviews, hiring 27+ people to keep growing a strong team.</li><li>Drove SOP optimization and office automation, improving efficiency across finance, operations, and HR by 30%+.</li>',
+      eduRole: 'B.A. Economics',
+      eduOrg: 'Zhejiang College of Shanghai University of Finance and Economics',
+      sectionProjects: 'Projects',
+      project1Title: 'Project name placeholder',
+      project1Desc: 'Project description placeholder, will swap in real copy.',
+      project2Title: 'Project name placeholder',
+      project2Desc: 'Project description placeholder, will swap in real copy.',
       sectionAsk: 'Ask me anything',
-      askIntro: 'This AI has read my full background. Ask anything about my experience, or try one of these:',
+      askIntro: 'Click a question below to see my answer:',
       q1: 'Why did you move from marketing into product?',
+      a1: 'When I joined to handle overseas communications, I noticed a gap on the product side — nobody was pushing it forward, so I stepped in. It turned out the two are one thread: you can\'t sell well without understanding the product, and you can\'t improve the product without touching the market.',
       q2: 'How do you think about GTM?',
+      a2: 'GTM isn\'t about finding channels after the product is done — you need to know who buys, why, and how to reach them from the product definition stage. That\'s how I worked at both WonderMaker and Lumos: building the product while validating the market in parallel.',
       q3: 'What is your biggest gap right now?',
+      a3: 'I don\'t come from an engineering background, so aligning on technical details with R&D takes more communication. I\'m learning Python now so I can follow the implementation logic and cut down on that friction.',
       wechatQr: 'QR code placeholder, coming later.',
-      footer: 'Made by vibe, shaped by heart.',
-      placeholder: 'Type your question...',
-      loading: 'Thinking',
-      apiFallback: 'Sorry, something went wrong. Please try again later.',
-      networkError: 'Network error. Please refresh and try again.'
+      footer: 'Made by vibe, shaped by heart.'
     }
   };
 
@@ -815,13 +972,14 @@
       if (copy[key]) el.innerHTML = copy[key];
     });
 
-    document.querySelectorAll('.ai-chip').forEach(chip => {
-      chip.dataset.question = lang === 'zh' ? chip.dataset.questionZh : chip.dataset.questionEn;
-    });
-
-    inputEl.placeholder = copy.placeholder;
-    const current = document.querySelector('.toggle-current');
-    if (current) current.textContent = lang === 'zh' ? '中文' : 'EN';
+    const zhSpan = document.querySelector('.toggle-zh');
+    const enSpan = document.querySelector('.toggle-en');
+    if (zhSpan && enSpan) {
+      zhSpan.classList.toggle('toggle-current', lang === 'zh');
+      zhSpan.classList.toggle('toggle-other', lang !== 'zh');
+      enSpan.classList.toggle('toggle-current', lang === 'en');
+      enSpan.classList.toggle('toggle-other', lang !== 'en');
+    }
   }
 
   document.getElementById('language-toggle')?.addEventListener('click', () => {
@@ -857,107 +1015,24 @@
   });
 
   // ============================
-  // 🤖 AI 问答功能
-  //
-  // ⚠️ 重要: 你需要用自己的方式接入 AI
-  // 下面提供了两种方案, 选一种:
-  //
-  // 方案 A: 直接调 Anthropic API (需要 API key)
-  //   - 简单, 但 API key 会暴露在前端代码里
-  //   - 适合个人项目, 不适合公开网站
-  //
-  // 方案 B: 通过你自己的后端代理 (推荐)
-  //   - 写一个简单的 serverless function (如 Vercel/Cloudflare Workers)
-  //   - 前端调你的 function, function 再调 Anthropic API
-  //   - API key 安全, 还能加速率限制
-  //
-  // 下面的代码默认用方案 A, 你需要把 YOUR_API_KEY 换成真实的 key
+  // 💬 Ask Me 手风琴展开
   // ============================
-
-  /* 👇 这是喂给 AI 的系统提示, 告诉它你是谁、怎么回答
-     你可以随意修改这段文字 */
-  const SYSTEM_PROMPT = `你是 Lexis Liu (刘含轩) 的个人简历 AI 助手。你的任务是根据以下信息, 用第一人称回答访客关于 Lexis 的问题。回答要诚实、具体、有人味, 不要说空话。如果问题超出你知道的范围, 就说"这个我没法替她回答, 建议你直接联系她"。
-
-关于 Lexis:
-- 现在在 LUMOS Robotics (鹿明机器人, 苏州) 做产品经理和海外商业化
-- LUMOS 做具身智能的机器人数据采集, 帮机器人公司生产训练数据
-- 入职时做海外传播, 后来主动接手了数采平台的产品设计, 主导了十余个模块(排期管理、质检、状态机、权限体系、首页看板等)
-- 同时负责硬件产品文档、竞品分析, 以及欧洲/印度/东南亚等海外市场 BD
-- 之前在 WonderMaker 3D (番茄智能, 浙江) 做市场营销主管, 从零搭建品牌, Kickstarter 筹了 100 万美金, 1114 人支持, 社媒六个月做到 780 万浏览
-- 再之前在汉造贸易做总经理助理, 管展会(CES、广交会、汉诺威等)、政府关系、招聘
-- 上海财经大学浙江学院, 经济学学士, 2023 年 6 月毕业
-- 职业方向: GTM / COO 路径, 不打算做纯产品经理
-- 核心能力: 能把从产品到市场的全链路跑通, 不是只做其中一头的人
-- 正在学 Python 和编程 (用 Cursor), 目的是跟研发协作时能对齐
-
-按后续语言指令回答, 简洁有力, 每次回答控制在 3-5 句话。`;
-
-  const messagesEl = document.getElementById('chat-messages');
-  const inputEl = document.getElementById('chat-input');
   setLanguage(currentLang);
 
-  // 预设问题按钮
-  document.querySelectorAll('.ai-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      inputEl.value = chip.dataset.question;
-      sendQuestion();
+  document.querySelectorAll('.qa-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.qa-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.qa-item.open').forEach(openItem => {
+        if (openItem !== item) {
+          openItem.classList.remove('open');
+          openItem.querySelector('.qa-question').setAttribute('aria-expanded', 'false');
+        }
+      });
+      item.classList.toggle('open', !isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
     });
   });
-
-  async function sendQuestion() {
-    const question = inputEl.value.trim();
-    if (!question) return;
-    inputEl.value = '';
-    const copy = translations[currentLang];
-
-    // 显示用户的问题
-    messagesEl.innerHTML += `<div class="chat-bubble user">${escapeHtml(question)}</div>`;
-
-    // 显示加载状态
-    const loadingId = 'loading-' + Date.now();
-    messagesEl.innerHTML += `<div class="chat-loading" id="${loadingId}">${copy.loading}</div>`;
-
-    try {
-      /* ============================
-         👇👇👇 在这里接入你的 AI API 👇👇👇
-
-         方案 A: 直接调 Anthropic API (把 YOUR_API_KEY 换掉)
-         ⚠️ 注意: API key 放在前端不安全, 仅限个人/演示用
-         ============================ */
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': 'YOUR_API_KEY',           // 👈 换成你的 API key
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',             // 👈 可以换模型
-          max_tokens: 500,
-          system: SYSTEM_PROMPT + (currentLang === 'en' ? '\n\nAnswer in English.' : '\n\n用中文回答。'),
-          messages: [{ role: 'user', content: question }]
-        })
-      });
-
-      const data = await response.json();
-      const answer = data.content?.[0]?.text || copy.apiFallback;
-
-      // 移除加载状态, 显示回答
-      document.getElementById(loadingId)?.remove();
-      messagesEl.innerHTML += `<div class="chat-bubble">${escapeHtml(answer)}</div>`;
-
-    } catch (err) {
-      document.getElementById(loadingId)?.remove();
-      messagesEl.innerHTML += `<div class="chat-bubble">${copy.networkError}</div>`;
-    }
-  }
-
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
 </script>
 
 </body>
