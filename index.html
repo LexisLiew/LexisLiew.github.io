@@ -445,34 +445,21 @@
        🚀 项目展示区
        ============================ */
     .project-card {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 20px;
+      display: block;
       padding: 20px 16px;
       margin: 0 -16px;
       border-radius: 8px;
+      border-top: 1px solid var(--border);
       cursor: pointer;
       transition: background 0.2s;
       text-decoration: none;
       color: inherit;
+      position: relative;
     }
+    #projects .project-card:first-of-type { border-top: none; }
     .project-card:hover { background: var(--card-hover); }
     .project-card:hover .project-title { color: var(--accent); }
 
-    .project-thumb {
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      border-radius: 6px;
-      overflow: hidden;
-      background: rgba(238,247,241,0.06);
-      border: 1px solid var(--border);
-    }
-    .project-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
     .project-title {
       display: flex;
       align-items: center;
@@ -497,6 +484,38 @@
       font-weight: 300;
       color: var(--text-secondary);
       line-height: 1.75;
+    }
+
+    /* 鼠标悬浮跟随的项目预览图 */
+    .project-float {
+      --tilt: 0deg;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 140px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 50;
+      background: var(--bg);
+      transform: translate(-9999px, -9999px) rotate(var(--tilt));
+      transition: opacity 0.18s ease;
+      will-change: transform, opacity;
+    }
+    .project-float.visible { opacity: 1; }
+    .project-float img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .project-float { display: none; }  /* 手机上没有鼠标悬浮, 直接隐藏 */
     }
 
     /* ============================
@@ -578,11 +597,6 @@
         grid-template-columns: 1fr;  /* 经历卡片也变成单栏 */
         gap: 4px;
       }
-      .project-card {
-        grid-template-columns: 1fr;  /* 项目卡片也变成单栏 */
-        gap: 10px;
-      }
-      .project-thumb { max-width: 200px; }
       .section-label { display: block !important; }
     }
 
@@ -777,41 +791,42 @@
     <section class="section" id="projects">
       <p class="section-label" data-i18n="sectionProjects">Projects</p>
 
-      <!-- 👇 项目 1: 占位 -->
-      <a class="project-card" href="#" target="_blank" rel="noopener">
-        <div class="project-thumb"></div>
-        <div>
-          <p class="project-title">
-            <span data-i18n="project1Title">项目名称占位</span>
-            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
-          </p>
-          <p class="project-desc" data-i18n="project1Desc">
-            这里放项目简介, 等拿到文案后替换。
-          </p>
-          <div class="tags">
-            <span class="tag">Tag 1</span>
-            <span class="tag">Tag 2</span>
-          </div>
+      <!-- 👇 项目 1: Lumos UMI 数据商城, data-img 换成真实图片路径, data-tilt 控制悬浮卡片倾斜角度 -->
+      <a class="project-card" href="https://data-market.lumosbot.tech/" target="_blank" rel="noopener" data-img="images/project-lumos.png" data-tilt="-6">
+        <p class="project-title">
+          <span data-i18n="project1Title">Lumos UMI 数据商城</span>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+        </p>
+        <p class="project-desc" data-i18n="project1Desc">
+          国内首个具身智能数据商城, 92+ 任务 SKU、覆盖家居/工业/医疗等 35+ 任务类别, 10万+ 条轨迹数据。已有 37+ 高校、企业、研究机构通过平台采购数据。
+        </p>
+        <div class="tags">
+          <span class="tag">Embodied AI</span>
+          <span class="tag">Data Marketplace</span>
+          <span class="tag">0→1 Product</span>
         </div>
       </a>
 
-      <!-- 👇 项目 2: 占位 -->
-      <a class="project-card" href="#" target="_blank" rel="noopener">
-        <div class="project-thumb"></div>
-        <div>
-          <p class="project-title">
-            <span data-i18n="project2Title">项目名称占位</span>
-            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
-          </p>
-          <p class="project-desc" data-i18n="project2Desc">
-            这里放项目简介, 等拿到文案后替换。
-          </p>
-          <div class="tags">
-            <span class="tag">Tag 1</span>
-            <span class="tag">Tag 2</span>
-          </div>
+      <!-- 👇 项目 2: WonderMaker Kickstarter -->
+      <a class="project-card" href="https://www.kickstarter.com/projects/wondermaker/zr-and-zrultra" target="_blank" rel="noopener" data-img="images/project-wondermaker.png" data-tilt="5">
+        <p class="project-title">
+          <span data-i18n="project2Title">WonderMaker ZR & ZR Ultra · Kickstarter</span>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+        </p>
+        <p class="project-desc" data-i18n="project2Desc">
+          主导的 3D 打印机众筹项目, 1,114 位 Backer 支持, 总筹金额超 90 万美元。从品牌 0 到 1 全程负责策略、内容、社群与创作者外联。
+        </p>
+        <div class="tags">
+          <span class="tag">Kickstarter</span>
+          <span class="tag">Brand 0→1</span>
+          <span class="tag">GTM</span>
         </div>
       </a>
+
+      <!-- 悬浮预览图, 跟随鼠标移动 -->
+      <div class="project-float" id="project-float">
+        <img id="project-float-img" src="" alt="">
+      </div>
     </section>
 
 
@@ -895,10 +910,10 @@
       eduRole: '经济学学士',
       eduOrg: '上海财经大学浙江学院',
       sectionProjects: 'Projects',
-      project1Title: '项目名称占位',
-      project1Desc: '这里放项目简介, 等拿到文案后替换。',
-      project2Title: '项目名称占位',
-      project2Desc: '这里放项目简介, 等拿到文案后替换。',
+      project1Title: 'Lumos UMI 数据商城',
+      project1Desc: '国内首个具身智能数据商城, 92+ 任务 SKU、覆盖家居/工业/医疗等 35+ 任务类别, 10万+ 条轨迹数据。已有 37+ 高校、企业、研究机构通过平台采购数据。',
+      project2Title: 'WonderMaker ZR & ZR Ultra · Kickstarter',
+      project2Desc: '主导的 3D 打印机众筹项目, 1,114 位 Backer 支持, 总筹金额超 90 万美元。从品牌 0 到 1 全程负责策略、内容、社群与创作者外联。',
       sectionAsk: 'Ask me anything',
       askIntro: '点击下面的问题, 看看我的回答:',
       q1: '你为什么从营销转去做产品?',
@@ -939,10 +954,10 @@
       eduRole: 'B.A. Economics',
       eduOrg: 'Zhejiang College of Shanghai University of Finance and Economics',
       sectionProjects: 'Projects',
-      project1Title: 'Project name placeholder',
-      project1Desc: 'Project description placeholder, will swap in real copy.',
-      project2Title: 'Project name placeholder',
-      project2Desc: 'Project description placeholder, will swap in real copy.',
+      project1Title: 'Lumos UMI Data Marketplace',
+      project1Desc: "China's first embodied-AI data marketplace, with 92+ task SKUs across 35+ categories (home, industrial, medical) and 100K+ trajectory data points. Used by 37+ universities, companies, and research institutes for data procurement.",
+      project2Title: 'WonderMaker ZR & ZR Ultra · Kickstarter',
+      project2Desc: 'Led this 3D printer crowdfunding campaign to $900K+ raised from 1,114 backers. Owned brand strategy, content, community, and creator outreach from 0 to 1.',
       sectionAsk: 'Ask me anything',
       askIntro: 'Click a question below to see my answer:',
       q1: 'Why did you move from marketing into product?',
@@ -1032,6 +1047,40 @@
       item.classList.toggle('open', !isOpen);
       btn.setAttribute('aria-expanded', String(!isOpen));
     });
+  });
+
+  // ============================
+  // 🖼️ 项目卡片悬浮预览图 (跟随鼠标)
+  // ============================
+  const projectFloat = document.getElementById('project-float');
+  const projectFloatImg = document.getElementById('project-float-img');
+  let activeProjectCard = null;
+
+  document.querySelectorAll('.project-card').forEach(card => {
+    const imgSrc = card.dataset.img;
+    const tilt = card.dataset.tilt || '0';
+
+    card.addEventListener('mouseenter', () => {
+      if (!imgSrc) return;
+      activeProjectCard = card;
+      projectFloatImg.src = imgSrc;
+      projectFloat.style.setProperty('--tilt', tilt + 'deg');
+      projectFloat.classList.add('visible');
+    });
+    card.addEventListener('mouseleave', () => {
+      if (activeProjectCard === card) {
+        activeProjectCard = null;
+        projectFloat.classList.remove('visible');
+      }
+    });
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!activeProjectCard) return;
+    const offsetX = 28;
+    const offsetY = -70;
+    projectFloat.style.transform =
+      `translate(${e.clientX + offsetX}px, ${e.clientY + offsetY}px) rotate(var(--tilt))`;
   });
 </script>
 
