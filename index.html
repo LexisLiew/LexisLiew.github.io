@@ -364,6 +364,24 @@
       55% { transform: translateY(1px); }
       75% { transform: translateY(-2px); }
     }
+
+    /* 👋 挥手动画, 只在手机端打开页面时自动播放一次 */
+    .wave-emoji {
+      display: inline-block;
+      transform-origin: 70% 70%;
+    }
+    @media (max-width: 768px) {
+      .wave-emoji {
+        animation: wave-hand 0.6s ease-in-out 0.3s 2;
+      }
+    }
+    @keyframes wave-hand {
+      0%, 100% { transform: rotate(0deg); }
+      20% { transform: rotate(16deg); }
+      40% { transform: rotate(-8deg); }
+      60% { transform: rotate(14deg); }
+      80% { transform: rotate(-4deg); }
+    }
     .interest-word[data-icon="🏋️"] { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="26">🏋️</text></svg>') 16 16, auto; }
     .interest-word[data-icon="☕"] { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="26">☕</text></svg>') 16 16, auto; }
     .interest-word[data-icon="📚"] { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="26">📚</text></svg>') 16 16, auto; }
@@ -590,21 +608,62 @@
         position: relative;     /* 不再 sticky, 变成普通头部 */
         height: auto;
         padding: 3rem 0 2rem;
+        z-index: 30;             /* 高于 .right(z-index:1), 否则吸顶导航会被正文内容盖住 */
       }
-      .nav { display: none; }  /* 手机上隐藏侧边导航 */
+      /* 手机上把侧边导航变成吸顶的极简横条目录 */
+      .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin-top: 0;
+        z-index: 20;
+        display: flex;
+        justify-content: center;
+        gap: 0;
+        padding: 14px 0;
+        background: rgba(18,63,64,0.92);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-link {
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 0 14px;
+        font-size: 9px;
+        letter-spacing: 1px;
+      }
+      .nav-link .bar {
+        width: 16px;
+      }
+      .nav-link:hover .bar,
+      .nav-link.active .bar {
+        width: 28px;
+      }
+      .left {
+        padding-top: 4.5rem;  /* 给吸顶导航留出空间, 避免遮住头部内容 */
+        padding-bottom: 2rem;
+      }
       .right { padding: 1rem 0 3rem; }
       .exp-card {
         grid-template-columns: 1fr;  /* 经历卡片也变成单栏 */
         gap: 4px;
       }
       .section-label { display: block !important; }
+
+      /* 头部区(姓名/头衔/简介/语言切换/社交图标)统一左对齐、收紧间距 */
+      .left h1 { font-size: 26px !important; line-height: 1.25 !important; }
+      .left > div:first-child > p:nth-of-type(1) { margin-bottom: 10px !important; }
+      .left .language-toggle { margin-top: 1rem; }
+      .left .social-links { margin-top: 1.5rem; }
     }
 
     /* 极小屏 (小手机): 进一步缩小字号和间距 */
     @media (max-width: 400px) {
       .site { padding: 0 1rem; }
-      .left { padding: 2rem 0 1.5rem; }
-      h1 { font-size: 24px !important; }
+      .left { padding-left: 0; padding-right: 0; padding-bottom: 1.5rem; }
+      .left h1 { font-size: 22px !important; }
     }
 
     /* 页脚 */
@@ -630,8 +689,8 @@
   <div class="left">
     <div>
       <!-- 👇 改你的名字 -->
-      <h1 data-i18n="heroTitle" style="font-size: 32px; font-weight: 700; letter-spacing: 0; margin-bottom: 8px; line-height: 1.15;">
-        你好！我是刘含轩👋
+      <h1 data-i18n-html="heroTitle" style="font-size: 32px; font-weight: 700; letter-spacing: 0; margin-bottom: 8px; line-height: 1.15;">
+        你好！我是刘含轩<span class="wave-emoji">👋</span>
       </h1>
 
       <!-- 👇 改你的头衔/一句话定位 -->
@@ -882,7 +941,7 @@
 <script>
   const translations = {
     zh: {
-      heroTitle: '你好！我是刘含轩👋',
+      heroTitle: '你好！我是刘含轩<span class="wave-emoji">👋</span>',
       heroSubtitle: 'Product & Go-to-Market',
       heroIntro: '做产品, 也做商业化：不想做BD的GTM不是好的产品经理',
       navAbout: 'About',
@@ -926,7 +985,7 @@
       footer: 'Made by vibe, shaped by heart.'
     },
     en: {
-      heroTitle: "Hello, I'm Lexis Liew👋",
+      heroTitle: 'Hello, I\'m Lexis Liew<span class="wave-emoji">👋</span>',
       heroSubtitle: 'Product & Go-to-Market',
       heroIntro: 'Product and commercialization, together: GTM without BD instincts is not good product management.',
       navAbout: 'About',
